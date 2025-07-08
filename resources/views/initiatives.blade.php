@@ -55,9 +55,14 @@
                 @if($pagination['total_pages'] > 1)
                     <div class="flex justify-center items-center space-x-4 mt-8">
                         <!-- 前のページ -->
-                        @if($pagination['has_prev'])
-                            <a href="{{ url()->current() }}?page={{ $pagination['next_page'] }}"
-                                class="px-2 py-0 text-[30px] text-green-800 rounded hover:bg-green-700 transition duration-200">
+                        @if($pagination['current_page'] > 1)
+                            @php
+                                $prevPage = $pagination['current_page'] - 1;
+                                $prevPageUrl = url()->current() . '?page=' . $prevPage;
+                            @endphp
+                            <a href="{{ $prevPageUrl }}"
+                                class="px-2 py-0 text-[30px] text-green-800 rounded hover:bg-green-700 transition duration-200"
+                                title="前のページ ({{ $prevPage }})">
                                 <i class="fas fa-caret-left"></i>
                             </a>
                         @else
@@ -82,9 +87,14 @@
                         </div>
 
                         <!-- 次のページ -->
-                        @if($pagination['has_next'])
-                            <a href="{{ url()->current() }}?page={{ $pagination['next_page'] }}"
-                                class="px-2 py-0 text-[30px] text-green-800 rounded hover:bg-green-700 transition duration-200">
+                        @if($pagination['current_page'] < $pagination['total_pages'])
+                            @php
+                                $nextPage = $pagination['current_page'] + 1;
+                                $nextPageUrl = url()->current() . '?page=' . $nextPage;
+                            @endphp
+                            <a href="{{ $nextPageUrl }}"
+                                class="px-2 py-0 text-[30px] text-green-800 rounded hover:bg-green-700 transition duration-200"
+                                title="次のページ ({{ $nextPage }})">
                                 <i class="fas fa-caret-right"></i>
                             </a>
                         @else
