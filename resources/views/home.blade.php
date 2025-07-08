@@ -147,11 +147,14 @@
     <div class="relative w-full">
         <img src="{{ asset($background3->file_path . $background3->file_name) }}" alt="ABOUT US"
             class="w-full h-auto object-cover">
-        <div class="absolute bottom-40 left-1/2 transform -translate-x-1/2 z-10">
-            <a href="{{ route($button3->spare1) }}" class="flex justify-center">
-                <img src="{{ asset($button3->file_path . $button3->file_name) }}" alt="もっとみる"
-                    class="h-24 transition transform hover:translate-y-1 hover:opacity-80" style="object-fit: contain;">
-            </a>
+        <div class="absolute inset-0 flex items-end justify-center pointer-events-none">
+            <div class="mb-[10%] pointer-events-auto">
+                <a href="{{ route($button3->spare1) }}">
+                    <img src="{{ asset($button3->file_path . $button3->file_name) }}" alt="もっとみる"
+                        class="h-auto w-[40vw] max-w-xs md:max-w-md lg:max-w-lg transition transform hover:translate-y-1 hover:opacity-80"
+                        style="object-fit: contain;">
+                </a>
+            </div>
         </div>
     </div>
 

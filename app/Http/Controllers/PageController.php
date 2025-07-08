@@ -177,6 +177,12 @@ class PageController extends Controller
 
         $celebrationMoney = $this->contentData->getContentWithSchema('T003');
 
+        $background = Image::where('view_flg', 'RECRUIT_background')->first();
+        $background2 = Image::where('view_flg', 'RECRUIT_background2')->first();
+
+        $titleRecruit = Image::where('view_flg', 'TITLE_recruit')->first();
+
+
         return view('recruit', compact(
             'logo1',
             'logo2',
@@ -186,7 +192,10 @@ class PageController extends Controller
             'menuButton',
             'textRecruitment',
             'textRecruitmentLabel',
-            'celebrationMoney'
+            'celebrationMoney',
+            'background',
+            'titleRecruit',
+            'background2'
         ));
     }
 

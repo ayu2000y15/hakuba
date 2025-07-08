@@ -6,21 +6,36 @@
         <div class="flex-shrink-0">
             <a href="/" aria-label="トップページへ">
                 <div class="flex items-center">
-                    <img src="{{ asset($logo1->file_path . $logo1->file_name) }}" alt="ロゴ" class="h-10">
-                    <img src="{{ asset($logo2->file_path . $logo2->file_name) }}" alt="薬局はくば" class="h-10 ml-2">
+                    {{-- PC表示：両方のロゴを表示 --}}
+                    <img src="{{ asset($logo1->file_path . $logo1->file_name) }}" alt="ロゴ" class="h-10 hidden md:block">
+                    <img src="{{ asset($logo2->file_path . $logo2->file_name) }}" alt="薬局はくば"
+                        class="h-10 ml-2 hidden md:block">
+
+                    {{-- スマホ表示：左側にlogo1のみ --}}
+                    <img src="{{ asset($logo1->file_path . $logo1->file_name) }}" alt="ロゴ" class="h-8 md:hidden">
                 </div>
             </a>
         </div>
 
-        {{-- 中央: PC用ナビゲーションメニュー --}}
-        <nav class="hidden md:flex space-x-6">
-            @foreach ($menuItem as $item)
-                <a href="{{ route($item->spare1) }}" class="py-2">
-                    <img src="{{ asset($item->file_path . $item->file_name) }}" alt="{{-- 適切なaltテキスト --}}"
-                        class="h-6 hover:opacity-80 transition-opacity">
+        {{-- 中央: スマホ用logo2とPC用ナビゲーションメニュー --}}
+        <div class="flex items-center">
+            {{-- スマホ表示：中央にlogo2 --}}
+            <div class="md:hidden">
+                <a href="/" aria-label="トップページへ">
+                    <img src="{{ asset($logo2->file_path . $logo2->file_name) }}" alt="薬局はくば" class="h-8">
                 </a>
-            @endforeach
-        </nav>
+            </div>
+
+            {{-- PC用ナビゲーションメニュー --}}
+            <nav class="hidden md:flex space-x-6">
+                @foreach ($menuItem as $item)
+                    <a href="{{ route($item->spare1) }}" class="py-2">
+                        <img src="{{ asset($item->file_path . $item->file_name) }}" alt="{{-- 適切なaltテキスト --}}"
+                            class="h-6 hover:opacity-80 transition-opacity">
+                    </a>
+                @endforeach
+            </nav>
+        </div>
 
         {{-- 右側: PC用 採用案内ボタン --}}
         <div class="hidden md:block">
@@ -41,6 +56,14 @@
     {{-- モバイル用 オーバーレイメニュー --}}
     {{-- z-50にしてヘッダー(z-40)より手前に表示 --}}
     <div id="mobile-menu" class="hidden fixed inset-0 bg-white z-50 p-6">
+        {{-- 閉じるボタンを右上に配置 --}}
+        <button id="close-menu-button" class="absolute top-6 right-6 z-10" aria-label="メニューを閉じる">
+            <svg class="h-8 w-8 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
         <div class="relative mb-10">
             <div class="flex justify-center items-center">
                 <img src="{{ asset($logo1->file_path . $logo1->file_name) }}" alt="ロゴ" class="h-10">
@@ -49,12 +72,6 @@
             <div class="flex justify-center items-center">
                 <img src="{{ asset($menuTitle->file_path . $menuTitle->file_name) }}" alt="タイトル" class="h-9 mt-12 ">
             </div>
-            <button id="close-menu-button" class="absolute top-1/2 right-0 -translate-y-1/2" aria-label="メニューを閉じる">
-                <svg class="h-8 w-8 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
         </div>
 
         <div class="flex flex-col">
@@ -86,19 +103,37 @@
         const hamburgerButton = document.getElementById('hamburger-button');
         const closeMenuButton = document.getElementById('close-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
+        let isMenuOpen = false;
+
+        function openMenu() {
+            if (mobileMenu) {
+                mobileMenu.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // スクロールを無効化
+                isMenuOpen = true;
+            }
+        }
+
+        function closeMenu() {
+            if (mobileMenu) {
+                mobileMenu.classList.add('hidden');
+                document.body.style.overflow = 'auto'; // スクロールを復元
+                isMenuOpen = false;
+            }
+        }
 
         if (hamburgerButton) {
-            hamburgerButton.addEventListener('click', () => {
-                if (mobileMenu) {
-                    mobileMenu.classList.remove('hidden');
-                }
-            });
+            hamburgerButton.addEventListener('click', openMenu);
         }
 
         if (closeMenuButton) {
-            closeMenuButton.addEventListener('click', () => {
-                if (mobileMenu) {
-                    mobileMenu.classList.add('hidden');
+            closeMenuButton.addEventListener('click', closeMenu);
+        }
+
+        // メニュー外をクリックしたときも閉じる
+        if (mobileMenu) {
+            mobileMenu.addEventListener('click', (e) => {
+                if (e.target === mobileMenu) {
+                    closeMenu();
                 }
             });
         }
@@ -110,6 +145,11 @@
             const headerHeight = header.offsetHeight; // ヘッダーの高さを取得
 
             window.addEventListener('scroll', () => {
+                // メニューが開いている場合はヘッダーの自動隠し機能を無効化
+                if (isMenuOpen) {
+                    return;
+                }
+
                 const currentScrollY = window.scrollY;
 
                 if (currentScrollY > lastScrollY && currentScrollY > headerHeight) {
@@ -122,5 +162,12 @@
                 lastScrollY = currentScrollY;
             });
         }
+
+        // ESCキーでメニューを閉じる
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isMenuOpen) {
+                closeMenu();
+            }
+        });
     });
 </script>
