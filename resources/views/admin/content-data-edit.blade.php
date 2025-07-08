@@ -493,10 +493,34 @@ document.addEventListener('DOMContentLoaded', function() {
             const dt = e.dataTransfer;
             const files = dt.files;
 
-            if (isMultiple) {
-                handleFiles(files);
-            } else if (files.length > 0) {
-                handleFiles([files[0]]);
+            // ドラッグ&ドロップされたファイルをinput要素に設定
+            if (files.length > 0) {
+                try {
+                    // FileListオブジェクトをinput.filesに設定
+                    const fileArray = Array.from(files);
+                    
+                    // DataTransferを使用してFileListを作成
+                    const dataTransfer = new DataTransfer();
+                    fileArray.forEach(file => dataTransfer.items.add(file));
+                    input.files = dataTransfer.files;
+                    
+                    // ドラッグ&ドロップファイルを管理用マップに保存
+                    dragDropFiles.set(fieldName, fileArray);
+                    
+                    if (isMultiple) {
+                        handleFiles(files);
+                    } else {
+                        handleFiles([files[0]]);
+                    }
+                } catch (error) {
+                    console.error('ファイル設定エラー:', error);
+                    // フォールバック: プレビューのみ表示
+                    if (isMultiple) {
+                        handleFiles(files);
+                    } else {
+                        handleFiles([files[0]]);
+                    }
+                }
             }
         }
 
@@ -523,6 +547,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     reader.onload = function(e) {
                         const preview = document.createElement('div');
                         preview.className = 'file-preview-item new-file';
+                        preview.setAttribute('data-file-name', file.name);
 
                         const img = document.createElement('img');
                         img.src = e.target.result;
@@ -544,10 +569,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             e.preventDefault();
                             preview.remove();
 
-                            // 単一ファイルの場合は入力をリセット
-                            if (!isMultiple) {
-                                input.value = '';
-                            }
+                            // ファイル削除後にinput.filesを更新
+                            updateInputFiles(input, previewContainer);
                         });
 
                         preview.appendChild(img);
@@ -576,157 +599,222 @@ document.addEventListener('DOMContentLoaded', function() {
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
     });
-});
 
-// 配列フィールドの処理
-const arrayFieldContainers = document.querySelectorAll('.array-field-container');
+    // ドラッグ&ドロップファイル管理用のマップ
+    const dragDropFiles = new Map();
 
-arrayFieldContainers.forEach(container => {
-    const fieldName = container.dataset.field;
-    const itemsContainer = document.getElementById(`array-items-${fieldName}`);
-    const addButton = container.querySelector('.add-array-item');
-
-    // PHPの配列をJavaScriptで使いやすい形式に変換
-    const arrayItems = @json(array_values(array_filter($sortedSchema, function($field) { return $field['type'] === 'array'; })));
-
-    // 項目追加ボタンのイベントリスナー
-    addButton.addEventListener('click', function() {
-        // 配列の構造をコンソールに出力して確認
-        console.log('Array items:', arrayItems);
-
-        // 対応するフィールドを検索
-        const field = arrayItems.find(item => item.col_name === fieldName);
-        if (!field || !field.array_items) {
-            console.error('Field not found or array_items missing:', fieldName);
-            return;
+    // カスタムFileListを作成する関数
+    function createFileList(files) {
+        const dt = new DataTransfer();
+        files.forEach(file => dt.items.add(file));
+        return dt.files;
+    }        // input.filesを更新する関数
+        function updateInputFiles(input, previewContainer) {
+            const newFilePreviews = previewContainer.querySelectorAll('.file-preview-item.new-file');
+            
+            if (newFilePreviews.length === 0) {
+                // ファイルがない場合はinput.valueを空にする
+                input.value = '';
+                dragDropFiles.delete(fieldName);
+                
+                // 必須フィールドの場合、required属性を復活
+                if (input.hasAttribute('data-required')) {
+                    input.setAttribute('required', '');
+                }
+            } else {
+                // 残りのファイルでFileListを再構築
+                const remainingFiles = dragDropFiles.get(fieldName) || [];
+                const remainingFileNames = Array.from(newFilePreviews).map(preview => 
+                    preview.getAttribute('data-file-name')
+                ).filter(name => name);
+                
+                const filteredFiles = remainingFiles.filter(file => 
+                    remainingFileNames.includes(file.name)
+                );
+                
+                if (filteredFiles.length > 0) {
+                    try {
+                        const dataTransfer = new DataTransfer();
+                        filteredFiles.forEach(file => dataTransfer.items.add(file));
+                        input.files = dataTransfer.files;
+                        dragDropFiles.set(fieldName, filteredFiles);
+                    } catch (error) {
+                        console.error('ファイル更新エラー:', error);
+                    }
+                }
+            }
         }
 
-        const itemIndex = itemsContainer.querySelectorAll('.array-item').length;
-        let itemHtml = `
-            <div class="array-item card p-3 mb-2">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h6 class="mb-0">項目 #${itemIndex + 1}</h6>
-                    <button type="button" class="btn btn-sm btn-danger remove-array-item">
-                        <i class="fas fa-times"></i> 削除
-                    </button>
-                </div>
-        `;
+    // 配列フィールドの処理
+    const arrayFieldContainers = document.querySelectorAll('.array-field-container');
 
-        field.array_items.forEach(arrayItem => {
-            itemHtml += `
-                <div class="mb-2">
-                    <label class="form-label">${arrayItem.name}</label>
+    arrayFieldContainers.forEach(container => {
+        const fieldName = container.dataset.field;
+        const itemsContainer = document.getElementById(`array-items-${fieldName}`);
+        const addButton = container.querySelector('.add-array-item');
+
+        // PHPの配列をJavaScriptで使いやすい形式に変換
+        const arrayItems = @json(array_values(array_filter($sortedSchema, function($field) { return $field['type'] === 'array'; })));
+
+        // 項目追加ボタンのイベントリスナー
+        addButton.addEventListener('click', function() {
+            // 配列の構造をコンソールに出力して確認
+            console.log('Array items:', arrayItems);
+
+            // 対応するフィールドを検索
+            const field = arrayItems.find(item => item.col_name === fieldName);
+            if (!field || !field.array_items) {
+                console.error('Field not found or array_items missing:', fieldName);
+                return;
+            }
+
+            const itemIndex = itemsContainer.querySelectorAll('.array-item').length;
+            let itemHtml = `
+                <div class="array-item card p-3 mb-2">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="mb-0">項目 #${itemIndex + 1}</h6>
+                        <button type="button" class="btn btn-sm btn-danger remove-array-item">
+                            <i class="fas fa-times"></i> 削除
+                        </button>
+                    </div>
             `;
 
-            if (arrayItem.type === 'text') {
+            field.array_items.forEach(arrayItem => {
                 itemHtml += `
-                    <input type="text"
-                           name="${fieldName}[${itemIndex}][${arrayItem.name}]"
-                           class="form-control"
-                           value="">
+                    <div class="mb-2">
+                        <label class="form-label">${arrayItem.name}</label>
                 `;
-            } else if (arrayItem.type === 'number') {
-                itemHtml += `
-                    <input type="number"
-                           name="${fieldName}[${itemIndex}][${arrayItem.name}]"
-                           class="form-control"
-                           value="">
-                `;
-            } else if (arrayItem.type === 'boolean') {
-                itemHtml += `
-                    <div class="form-check">
-                        <input type="checkbox"
-                               class="form-check-input"
-                               id="${fieldName}_${itemIndex}_${arrayItem.name}"
+
+                if (arrayItem.type === 'text') {
+                    itemHtml += `
+                        <input type="text"
                                name="${fieldName}[${itemIndex}][${arrayItem.name}]"
-                               value="1">
-                        <label class="form-check-label" for="${fieldName}_${itemIndex}_${arrayItem.name}">
-                            有効
-                        </label>
+                               class="form-control"
+                               value="">
+                    `;
+                } else if (arrayItem.type === 'number') {
+                    itemHtml += `
+                        <input type="number"
+                               name="${fieldName}[${itemIndex}][${arrayItem.name}]"
+                               class="form-control"
+                               value="">
+                    `;
+                } else if (arrayItem.type === 'boolean') {
+                    itemHtml += `
+                        <div class="form-check">
+                            <input type="checkbox"
+                                   class="form-check-input"
+                                   id="${fieldName}_${itemIndex}_${arrayItem.name}"
+                                   name="${fieldName}[${itemIndex}][${arrayItem.name}]"
+                                   value="1">
+                            <label class="form-check-label" for="${fieldName}_${itemIndex}_${arrayItem.name}">
+                                有効
+                            </label>
+                        </div>
+                    `;
+                } else if (arrayItem.type === 'date') {
+                    itemHtml += `
+                        <input type="date"
+                               name="${fieldName}[${itemIndex}][${arrayItem.name}]"
+                               class="form-control"
+                               value="">
+                    `;
+                } else if (arrayItem.type === 'url') {
+                    itemHtml += `
+                        <input type="url"
+                               name="${fieldName}[${itemIndex}][${arrayItem.name}]"
+                               class="form-control"
+                               value=""
+                               placeholder="https://example.com">
+                    `;
+                }
+
+                itemHtml += `
                     </div>
                 `;
-            } else if (arrayItem.type === 'date') {
-                itemHtml += `
-                    <input type="date"
-                           name="${fieldName}[${itemIndex}][${arrayItem.name}]"
-                           class="form-control"
-                           value="">
-                `;
-            } else if (arrayItem.type === 'url') {
-                itemHtml += `
-                    <input type="url"
-                           name="${fieldName}[${itemIndex}][${arrayItem.name}]"
-                           class="form-control"
-                           value=""
-                           placeholder="https://example.com">
-                `;
-            }
+            });
 
-            itemHtml += `
-                </div>
-            `;
+            itemHtml += `</div>`;
+
+            itemsContainer.insertAdjacentHTML('beforeend', itemHtml);
+
+            // 削除ボタンのイベントリスナーを設定
+            const removeButtons = itemsContainer.querySelectorAll('.remove-array-item');
+            const lastRemoveButton = removeButtons[removeButtons.length - 1];
+
+            lastRemoveButton.addEventListener('click', function() {
+                this.closest('.array-item').remove();
+                // インデックスを更新
+                updateArrayItemIndexes(fieldName);
+            });
         });
 
-        itemHtml += `</div>`;
-
-        itemsContainer.insertAdjacentHTML('beforeend', itemHtml);
-
-        // 削除ボタンのイベントリスナーを設定
-        const removeButtons = itemsContainer.querySelectorAll('.remove-array-item');
-        const lastRemoveButton = removeButtons[removeButtons.length - 1];
-
-        lastRemoveButton.addEventListener('click', function() {
-            this.closest('.array-item').remove();
-            // インデックスを更新
-            updateArrayItemIndexes(fieldName);
+        // 既存の削除ボタンにイベントリスナーを設定
+        const removeButtons = container.querySelectorAll('.remove-array-item');
+        removeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                this.closest('.array-item').remove();
+                // インデックスを更新
+                updateArrayItemIndexes(fieldName);
+            });
         });
-    });
 
-    // 既存の削除ボタンにイベントリスナーを設定
-    const removeButtons = container.querySelectorAll('.remove-array-item');
-    removeButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            this.closest('.array-item').remove();
-            // インデックスを更新
-            updateArrayItemIndexes(fieldName);
-        });
-    });
+        // 配列項目のインデックスを更新する関数
+        function updateArrayItemIndexes(fieldName) {
+            const items = document.querySelectorAll(`#array-items-${fieldName} .array-item`);
 
-    // 配列項目のインデックスを更新する関数
-    function updateArrayItemIndexes(fieldName) {
-        const items = document.querySelectorAll(`#array-items-${fieldName} .array-item`);
+            items.forEach((item, index) => {
+                // タイトルを更新
+                const title = item.querySelector('h6');
+                if (title) {
+                    title.textContent = `項目 #${index + 1}`;
+                }
 
-        items.forEach((item, index) => {
-            // タイトルを更新
-            const title = item.querySelector('h6');
-            if (title) {
-                title.textContent = `項目 #${index + 1}`;
-            }
+                // 入力フィールドの名前属性を更新
+                const inputs = item.querySelectorAll('input');
+                inputs.forEach(input => {
+                    const name = input.name;
+                    // 正規表現で現在のインデックスを抽出
+                    const pattern = new RegExp(`${fieldName}\\[(\\d+)\\]`);
+                    const match = name.match(pattern);
 
-            // 入力フィールドの名前属性を更新
-            const inputs = item.querySelectorAll('input');
-            inputs.forEach(input => {
-                const name = input.name;
-                // 正規表現で現在のインデックスを抽出
-                const pattern = new RegExp(`${fieldName}\\[(\\d+)\\]`);
-                const match = name.match(pattern);
+                    if (match) {
+                        const oldIndex = match[1];
+                        const newName = name.replace(`${fieldName}[${oldIndex}]`, `${fieldName}[${index}]`);
+                        input.name = newName;
 
-                if (match) {
-                    const oldIndex = match[1];
-                    const newName = name.replace(`${fieldName}[${oldIndex}]`, `${fieldName}[${index}]`);
-                    input.name = newName;
+                        // チェックボックスのIDも更新
+                        if (input.type === 'checkbox') {
+                            const id = input.id;
+                            const newId = id.replace(`${fieldName}_${oldIndex}`, `${fieldName}_${index}`);
+                            input.id = newId;
 
-                    // チェックボックスのIDも更新
-                    if (input.type === 'checkbox') {
-                        const id = input.id;
-                        const newId = id.replace(`${fieldName}_${oldIndex}`, `${fieldName}_${index}`);
-                        input.id = newId;
-
-                        // ラベルのforも更新
-                        const label = item.querySelector(`label[for="${id}"]`);
-                        if (label) {
-                            label.setAttribute('for', newId);
+                            // ラベルのforも更新
+                            const label = item.querySelector(`label[for="${id}"]`);
+                            if (label) {
+                                label.setAttribute('for', newId);
+                            }
                         }
+                    }
+                });
+            });
+        }
+    });
+
+    // フォーム送信時の処理
+    const form = document.querySelector('.data-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            // ドラッグ&ドロップファイルが確実に送信されるよう確認
+            dragDropFiles.forEach((files, fieldName) => {
+                const input = document.getElementById(fieldName);
+                if (input && files.length > 0) {
+                    try {
+                        const dataTransfer = new DataTransfer();
+                        files.forEach(file => dataTransfer.items.add(file));
+                        input.files = dataTransfer.files;
+                    } catch (error) {
+                        console.error('フォーム送信時のファイル設定エラー:', error);
                     }
                 }
             });

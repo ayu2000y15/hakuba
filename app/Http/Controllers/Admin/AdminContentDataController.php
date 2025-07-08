@@ -29,7 +29,7 @@ class AdminContentDataController extends Controller
             $masters = $this->contentMaster->getMasterAll();
             $allData = $this->contentData->getAllData();
         } else {
-            $masters = $this->contentMaster->getMasterInId(['T001', 'T002']);
+            $masters = $this->contentMaster->getMasterInId("'T002','T004'");
             $allData = $this->contentData->getAllData();
         }
 
