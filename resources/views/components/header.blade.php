@@ -46,6 +46,9 @@
                 <img src="{{ asset($logo1->file_path . $logo1->file_name) }}" alt="ロゴ" class="h-10">
                 <img src="{{ asset($logo2->file_path . $logo2->file_name) }}" alt="薬局はくば" class="h-10 ml-2">
             </div>
+            <div class="flex justify-center items-center">
+                <img src="{{ asset($menuTitle->file_path . $menuTitle->file_name) }}" alt="タイトル" class="h-9 mt-12 ">
+            </div>
             <button id="close-menu-button" class="absolute top-1/2 right-0 -translate-y-1/2" aria-label="メニューを閉じる">
                 <svg class="h-8 w-8 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">

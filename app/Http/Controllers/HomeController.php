@@ -5,9 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\Image;
 use App\Models\HpText;
 use Illuminate\View\View;
+use App\Services\ContentMasterService;
+use App\Services\ContentDataService;
 
 class HomeController extends Controller
 {
+    protected $contentMaster;
+    protected $contentData;
+
+    public function __construct(ContentMasterService $contentMaster, ContentDataService $contentData)
+    {
+        $this->contentMaster = $contentMaster;
+        $this->contentData = $contentData;
+    }
     /**
      * ホーム画面を表示
      */
@@ -19,17 +29,25 @@ class HomeController extends Controller
 
         // スマホ用のメニューアイコンとメニュー項目を取得
         $menuIcon = Image::where('view_flg', 'MENU_hamburger')->first();
-        $menuBackground = Image::where('view_flg', 'MENU_background')->first();
+        $menuTitle = Image::where('view_flg', 'MENU_ICON')->first();
+
         $menuItem = Image::where('view_flg', 'MENU_ITEM')->orderBy('priority')->get();
         $menuButton = Image::where('view_flg', 'MENU_button1')->first();
 
         // フッター画像を取得
         $footerImage = Image::where('view_flg', 'FOOTER_background')->first();
 
-        $bird = Image::where('view_flg', 'HOME_bird')->first();
+        // タイトル
+        $titleInitiatives = Image::where('view_flg', 'TITLE_initiatives')->first();
+        $titleStores = Image::where('view_flg', 'TITLE_stores')->first();
+        $titleAbout = Image::where('view_flg', 'TITLE_about')->first();
+        $titleRecruit = Image::where('view_flg', 'TITLE_recruit')->first();
+
         $imgMobile = Image::where('view_flg', 'HOME_img_mobile')->first();
         $imgPc = Image::where('view_flg', 'HOME_img_pc')->first();
         $imgUnder = Image::where('view_flg', 'HOME_img_under')->first();
+        $imgSoil = Image::where('view_flg', 'HOME_background0')->first();
+
         $button0 = Image::where('view_flg', 'HOME_button0')->first();
         $background1 = Image::where('view_flg', 'HOME_background1')->first();
         $button1 = Image::where('view_flg', 'HOME_button1')->first();
@@ -41,17 +59,29 @@ class HomeController extends Controller
         $background4 = Image::where('view_flg', 'HOME_background4')->first();
         $button4 = Image::where('view_flg', 'HOME_button4')->first();
 
+        // アイコン画像
+        $bird = Image::where('view_flg', 'ICON_bird')->first();
+        $car = Image::where('view_flg', 'ICON_car')->first();
+        $person1 = Image::where('view_flg', 'HOME_person1')->first();
+        $person2 = Image::where('view_flg', 'HOME_person2')->first();
+
         // 本文
         $TopText = HpText::where('hp_text_id', 'HOME_TOP')->first();
+
+        $options = [
+            ['priority', true],
+            ['created_at', true]
+        ];
+        $initiativeContents = $this->contentData->getContentByMasterId('T004', 3, [], $options);
 
 
         return view('home', compact(
             'logo1',
             'logo2',
             'menuIcon',
-            'menuBackground',
             'menuItem',
             'menuButton',
+            'menuTitle',
             'footerImage',
             'bird',
             'imgMobile',
@@ -67,7 +97,16 @@ class HomeController extends Controller
             'button3',
             'background4',
             'button4',
-            'TopText'
+            'TopText',
+            'titleInitiatives',
+            'titleStores',
+            'titleAbout',
+            'titleRecruit',
+            'car',
+            'person1',
+            'person2',
+            'initiativeContents',
+            'imgSoil'
         ));
     }
 }

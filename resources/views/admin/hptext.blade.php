@@ -40,92 +40,7 @@
 
                     <div class="mb-3">
                         <label for="content" class="form-label">内容<span class="text-danger ms-1">*</span></label>
-
-                        <div class="rich-text-container">
-                            <div class="rich-text-toolbar">
-                                <div class="toolbar-left">
-                                    <!-- フォントサイズ -->
-                                    <select id="fontSizeSelect" class="format-select">
-                                        <option value="1">10px</option>
-                                        <option value="2">13px</option>
-                                        <option value="3" selected>16px</option>
-                                        <option value="4">18px</option>
-                                        <option value="5">24px</option>
-                                        <option value="6">32px</option>
-                                        <option value="7">48px</option>
-                                    </select>
-                                    <select id="formatBlock" class="format-select">
-                                        <option value="">書式</option>
-                                        <option value="p">段落</option>
-                                        <option value="h1">見出し 1</option>
-                                        <option value="h2">見出し 2</option>
-                                        <option value="h3">見出し 3</option>
-                                        <option value="h4">見出し 4</option>
-                                    </select>
-
-                                    <button type="button" data-command="bold" class="toolbar-btn" title="太字">
-                                        <i class="fas fa-bold"></i>
-                                    </button>
-                                    <button type="button" data-command="italic" class="toolbar-btn" title="斜体">
-                                        <i class="fas fa-italic"></i>
-                                    </button>
-                                    <button type="button" data-command="underline" class="toolbar-btn" title="下線">
-                                        <i class="fas fa-underline"></i>
-                                    </button>
-                                    <span class="toolbar-divider"></span>
-
-                                    <button type="button" data-command="foreColor" class="toolbar-btn color-btn"
-                                        title="文字色">
-                                        <i class="fas fa-font"></i>
-                                        <input type="color" class="color-picker" id="foreColorPicker" value="#000000">
-                                    </button>
-                                    <button type="button" data-command="backColor" class="toolbar-btn bg-color-btn"
-                                        title="背景色">
-                                        <i class="fas fa-fill-drip"></i>
-                                        <input type="color" class="color-picker" id="backColorPicker" value="#ffffff">
-                                    </button>
-                                    <span class="toolbar-divider"></span>
-
-                                    <button type="button" data-command="justifyLeft" class="toolbar-btn" title="左揃え">
-                                        <i class="fas fa-align-left"></i>
-                                    </button>
-                                    <button type="button" data-command="justifyCenter" class="toolbar-btn" title="中央揃え">
-                                        <i class="fas fa-align-center"></i>
-                                    </button>
-                                    <button type="button" data-command="justifyRight" class="toolbar-btn" title="右揃え">
-                                        <i class="fas fa-align-right"></i>
-                                    </button>
-                                    <span class="toolbar-divider"></span>
-
-                                    <button type="button" data-command="insertUnorderedList" class="toolbar-btn"
-                                        title="箇条書き">
-                                        <i class="fas fa-list-ul"></i>
-                                    </button>
-                                    <button type="button" data-command="insertOrderedList" class="toolbar-btn"
-                                        title="番号付きリスト">
-                                        <i class="fas fa-list-ol"></i>
-                                    </button>
-                                    <span class="toolbar-divider"></span>
-
-                                    <button type="button" data-command="createLink" class="toolbar-btn" title="リンク">
-                                        <i class="fas fa-link"></i>
-                                    </button>
-                                    <button type="button" data-command="insertImage" class="toolbar-btn" title="画像">
-                                        <i class="fas fa-image"></i>
-                                    </button>
-                                </div>
-                                <div class="toolbar-right">
-                                    <span>フォーマット：</span>
-                                    <select id="formatSelector" class="format-select">
-                                        <option value="richtext" selected>リッチテキスト</option>
-                                        <option value="plaintext">本文</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div id="editor" class="rich-text-editor" contenteditable="true"></div>
-                            <textarea id="content" name="content" style="display: none;" required></textarea>
-                        </div>
+                        <textarea id="content" name="content" class="form-control" rows="10" required></textarea>
                     </div>
 
                     <div class="d-flex justify-content-end mt-4">
@@ -183,8 +98,8 @@
                                     <td>{{ $def->t_id }}</td>
                                     <td>{{ $def->memo }}</td>
                                     <td>
-                                        <div class="rich-text-content">
-                                            {!! $def->content !!}
+                                        <div class="text-content">
+                                            {!! nl2br($def->content) !!}
                                         </div>
                                     </td>
                                 </tr>
@@ -204,103 +119,7 @@
             const newEntryBtn = document.getElementById('newEntryBtn');
             const submitBtn = document.getElementById('submitBtn');
             const cancelBtn = document.getElementById('cancelBtn');
-            const formatSelector = document.getElementById('formatSelector');
-            const editor = document.getElementById('editor');
             const contentTextarea = document.getElementById('content');
-            const foreColorPicker = document.getElementById('foreColorPicker');
-            const backColorPicker = document.getElementById('backColorPicker');
-
-            // リッチテキストエディタの初期化
-            initRichTextEditor();
-
-            function initRichTextEditor() {
-                const toolbarButtons = document.querySelectorAll('.toolbar-btn');
-                const formatBlockSelect = document.getElementById('formatBlock');
-
-                // ツールバーボタンのイベントリスナー
-                toolbarButtons.forEach(button => {
-                    button.addEventListener('click', function () {
-                        const command = this.dataset.command;
-                        let value = this.dataset.value || '';
-
-                        if (command === 'createLink') {
-                            const url = prompt('リンクURLを入力してください:', 'https://');
-                            if (url) {
-                                document.execCommand(command, false, url);
-                            }
-                        } else if (command === 'insertImage') {
-                            const url = prompt('画像URLを入力してください:', 'https://');
-                            if (url) {
-                                document.execCommand(command, false, url);
-                            }
-                        } else if (command === 'foreColor' || command === 'backColor') {
-                            // カラーピッカーのクリックは処理しない（input[type=color]のchangeイベントで処理）
-                            return;
-                        } else {
-                            document.execCommand(command, false, value);
-                        }
-
-                        // エディタの内容をテキストエリアに反映
-                        updateTextarea();
-                    });
-                });
-
-                // カラーピッカーのイベントリスナー
-                foreColorPicker.addEventListener('input', function () {
-                    document.execCommand('foreColor', false, this.value);
-                    updateTextarea();
-                });
-
-                backColorPicker.addEventListener('input', function () {
-                    document.execCommand('backColor', false, this.value);
-                    updateTextarea();
-                });
-
-                // 書式選択のイベントリスナー
-                formatBlockSelect.addEventListener('change', function () {
-                    if (this.value) {
-                        document.execCommand('formatBlock', false, '<' + this.value + '>');
-                        this.selectedIndex = 0; // リセット
-                        updateTextarea();
-                    }
-                });
-
-                // エディタの内容変更イベント
-                editor.addEventListener('input', updateTextarea);
-                editor.addEventListener('blur', updateTextarea);
-
-                // フォーマット選択の変更イベント
-                formatSelector.addEventListener('change', function () {
-                    if (this.value === 'plaintext') {
-                        // プレーンテキストモード
-                        editor.style.fontFamily = 'monospace';
-                        document.querySelectorAll('.toolbar-btn, #formatBlock').forEach(el => {
-                            el.disabled = true;
-                        });
-                    } else {
-                        // リッチテキストモード
-                        editor.style.fontFamily = '';
-                        document.querySelectorAll('.toolbar-btn, #formatBlock').forEach(el => {
-                            el.disabled = false;
-                        });
-                    }
-                });
-            }
-
-            // エディタの内容をテキストエリアに反映する関数
-            function updateTextarea() {
-                contentTextarea.value = editor.innerHTML;
-            }
-
-            // テキストエリアの内容をエディタに反映する関数
-            function updateEditor() {
-                editor.innerHTML = contentTextarea.value;
-            }
-
-            // フォーム送信前にテキストエリアを更新
-            form.addEventListener('submit', function () {
-                updateTextarea();
-            });
 
             //キャンセルボタンのイベントリスナー
             cancelBtn.addEventListener('click', function () {
@@ -327,9 +146,7 @@
 
                     document.getElementById('memo').value = memo;
 
-                    // エディタに内容を反映（生のHTMLを使用）
-                    editor.innerHTML = rawContent;
-                    // テキストエリアにも反映
+                    // テキストエリアに内容を反映
                     contentTextarea.value = rawContent;
 
                     submitBtn.textContent = '更新';
@@ -347,7 +164,6 @@
                 textIdField.classList.remove('bg-light');
 
                 contentTextarea.value = '';
-                editor.innerHTML = '';
                 document.getElementById('memo').value = '';
 
                 submitBtn.innerHTML = '<i class="fas fa-save me-1"></i> 登録';
@@ -363,54 +179,21 @@
                 dataFormContainer.style.display = 'none';
             }
         });
-
-        // フォントサイズ変更
-        document.getElementById('fontSizeSelect').addEventListener('change', function () {
-            document.execCommand('fontSize', false, this.value);
-        });
     </script>
 
     <style>
-        .rich-text-editor font[size="1"] {
-            font-size: 10px;
+        .text-content {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-width: 500px;
+            overflow-wrap: break-word;
         }
 
-        .rich-text-editor font[size="2"] {
-            font-size: 13px;
-        }
-
-        .rich-text-editor font[size="3"] {
-            font-size: 16px;
-        }
-
-        .rich-text-editor font[size="4"] {
-            font-size: 18px;
-        }
-
-        .rich-text-editor font[size="5"] {
-            font-size: 24px;
-        }
-
-        .rich-text-editor font[size="6"] {
-            font-size: 32px;
-        }
-
-        .rich-text-editor font[size="7"] {
-            font-size: 48px;
-        }
-
-        .rich-text-editor img {
-            max-width: 80%;
-            height: auto;
-            display: block;
-            margin: 1em 0;
-        }
-
-        .rich-text-content img {
-            max-width: 80%;
-            height: auto;
-            display: block;
-            margin: 1em 0;
+        .card-body {
+            background-color: #faf9f6 !important;
         }
     </style>
 @endsection

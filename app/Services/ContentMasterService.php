@@ -14,19 +14,18 @@ class ContentMasterService
             ->get();
     }
 
-    public function getMasterInId($masterIdList)
-    {
-        return ContentMaster::whereIn('master_id', $masterIdList)
-            ->where('delete_flg', '0')
-            ->orderBy('master_id')
-            ->get();
-    }
-
     public function getMasterById($masterId)
     {
         return ContentMaster::where('master_id', $masterId)
             ->where('delete_flg', '0')
             ->first();
+    }
+
+    public function getMasterInId($masterId)
+    {
+        return ContentMaster::whereRaw('master_id in (' . $masterId . ')')
+            ->where('delete_flg', '0')
+            ->get();
     }
 
     public function updateSchema($masterId, $schema)

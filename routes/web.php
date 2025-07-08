@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\AdminHpTextController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/initiatives', [PageController::class, 'initiatives'])->name('initiatives');
+Route::get('/initiatives/{id}', [PageController::class, 'initiativeDetail'])->name('initiatives.detail');
 Route::get('/stores', [PageController::class, 'stores'])->name('stores');
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/recruit', [PageController::class, 'recruit'])->name('recruit');

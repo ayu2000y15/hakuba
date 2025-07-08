@@ -3,35 +3,103 @@
 @section('title', '薬局はくばの取り組み')
 
 @section('content')
-    <div class="container mx-auto px-4 py-12">
-        <h1 class="text-4xl font-bold text-center text-gray-800 mb-12 relative pb-4">
-            <span class="inline-block relative z-10">薬局はくばの取り組み</span>
-            <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-24 h-1 bg-green-500 rounded-full"></span>
-        </h1>
+    {{-- ★変更点1: 'relative'クラスを追加して、このdivを絶対配置の基準にする --}}
+    <div class="relative py-4 md:py-24 bg-cover bg-top bg-no-repeat"
+        style="background-image: url('{{ asset($background1->file_path . $background1->file_name) }}');">
 
-        {{-- Add the content for your initiatives here --}}
-        <div class="prose max-w-none">
-            <p>ここに「薬局はくばの取り組み」に関する詳細な内容を記述します。例えば、地域医療への貢献、専門的な薬剤師の育成、最新設備による安全性向上など、具体的な活動を紹介します。</p>
+        {{-- タイトル --}}
+        <div class="pt-2 mt-0 flex flex-row items-center gap-8 z-20">
+            <img src="{{ asset($titleInitiatives->file_path . $titleInitiatives->file_name) }}" alt="タイトル"
+                class="lg:h-24 md:h-18 h-10" style="object-fit: contain;">
+        </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-                <div class="bg-white p-6 rounded-lg shadow-md text-center">
-                    <img src="{{ asset('images/initiative1.jpg') }}" alt="取り組み1"
-                        class="w-full h-48 object-cover rounded-md mb-4">
-                    <h3 class="text-xl font-semibold mb-2">地域に根ざした医療</h3>
-                    <p class="text-gray-700">地域住民の健康をサポートするため、きめ細やかなサービスを提供しています。</p>
+        <div class="container mx-auto px-4 flex flex-col items-center relative">
+            <div class="w-full max-w-5xl rounded-2xl  relative" style="background-color: rgba(255, 255, 255, 0);">
+                <!-- 車の画像を白い枠の右上角（外側）に配置 -->
+                <img src="{{ asset($car->file_path . $car->file_name) }}" alt="車"
+                    class="absolute -top-11 -right-0 md:-top-21 md:h-30 h-20 z-10" style="object-fit: contain;">
+                {{-- グリッドコンテナで2列表示を指定 --}}
+                <div class="mt-8 w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                    @foreach ($initiativeContents as $content)
+                        {{-- 各コンテンツのコンテナ (白枠) --}}
+                        <div class="rounded-2xl p-6 md:p-8 flex flex-col" style="background-color: rgba(255, 255, 255, 0.7);">
+
+                            {{-- 画像 (上部) --}}
+                            <div class="w-full mb-4">
+                                @if (!empty($content->attempt_img["value"][0]))
+                                    @php
+                                        $contentImg = $content->attempt_img["value"][0];
+                                    @endphp
+                                    <img src="{{ asset($contentImg) }}" alt="コンテンツ画像"
+                                        class="w-full aspect-video object-cover shadow-lg rounded-lg" style="object-fit: contain;">
+                                @endif
+                            </div>
+
+                            {{-- テキストコンテンツ (下部) --}}
+                            <div class="flex-1 flex flex-col text-left text-green-800 text-sm md:text-base">
+                                <h2 class="mb-2 md:mb-4 text-lg md:text-2xl font-bold">{{ $content->attempt["value"] }}</h2>
+                                <div class=" mb-auto font-bold">
+                                    {!! nl2br($content->home_content["value"]) !!}
+                                </div>
+                                {{-- 「続きを読む」リンクを右寄せ --}}
+                                <a href="{{ route('initiatives.detail', $content->id) }}"
+                                    class="block mt-4 py-2 transition duration-200 ease-in-out hover:opacity-75 ml-auto w-fit">
+                                    <i class="fas fa-arrow-right"></i> 続きを読む
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md text-center">
-                    <img src="{{ asset('images/initiative2.jpg') }}" alt="取り組み2"
-                        class="w-full h-48 object-cover rounded-md mb-4">
-                    <h3 class="text-xl font-semibold mb-2">専門知識と経験</h3>
-                    <p class="text-gray-700">豊富な知識と経験を持つ薬剤師が、患者様一人ひとりに合わせた最適な薬を提供します。</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md text-center">
-                    <img src="{{ asset('images/initiative3.jpg') }}" alt="取り組み3"
-                        class="w-full h-48 object-cover rounded-md mb-4">
-                    <h3 class="text-xl font-semibold mb-2">最新の設備</h3>
-                    <p class="text-gray-700">調剤過誤防止のための最新機器を導入し、安全・安心な医療を提供します。</p>
-                </div>
+
+                <!-- ページネーション -->
+                @if($pagination['total_pages'] > 1)
+                    <div class="flex justify-center items-center space-x-4 mt-8">
+                        <!-- 前のページ -->
+                        @if($pagination['has_prev'])
+                            <a href="{{ url()->current() }}?page={{ $pagination['next_page'] }}"
+                                class="px-2 py-0 text-[30px] text-green-800 rounded hover:bg-green-700 transition duration-200">
+                                <i class="fas fa-caret-left"></i>
+                            </a>
+                        @else
+                            <span class="px-2 py-0 text-[30px] text-gray-500 rounded cursor-not-allowed">
+                                <i class="fas fa-caret-left"></i>
+                            </span>
+                        @endif
+
+                        <!-- ページ番号 -->
+                        <div class="flex space-x-2">
+                            @for($i = 1; $i <= $pagination['total_pages']; $i++)
+                                @if($i == $pagination['current_page'])
+                                    <span
+                                        class="w-10 h-10 bg-green-800 text-white rounded-full flex items-center justify-center font-bold text-lg">{{ $i }}</span>
+                                @else
+                                    <a href="{{ url()->current() }}?page={{ $i }}"
+                                        class="w-10 h-10 text-green-800 rounded-full flex items-center justify-center hover:bg-green-300 transition duration-200 text-lg font-medium">
+                                        {{ $i }}
+                                    </a>
+                                @endif
+                            @endfor
+                        </div>
+
+                        <!-- 次のページ -->
+                        @if($pagination['has_next'])
+                            <a href="{{ url()->current() }}?page={{ $pagination['next_page'] }}"
+                                class="px-2 py-0 text-[30px] text-green-800 rounded hover:bg-green-700 transition duration-200">
+                                <i class="fas fa-caret-right"></i>
+                            </a>
+                        @else
+                            <span class="px-2 py-0 text-[30px] text-gray-500 rounded cursor-not-allowed">
+                                <i class="fas fa-caret-right"></i>
+                            </span>
+                        @endif
+                    </div>
+
+                    <!-- ページ情報 -->
+                    <div class="text-center mt-4 text-green-800 text-sm">
+                        {{ $pagination['total_count'] }}件中
+                        {{ (($pagination['current_page'] - 1) * $pagination['per_page']) + 1 }}〜{{ min($pagination['current_page'] * $pagination['per_page'], $pagination['total_count']) }}件を表示
+                    </div>
+                @endif
             </div>
         </div>
     </div>

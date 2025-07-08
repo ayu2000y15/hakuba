@@ -331,7 +331,13 @@ class ContentDataService
             foreach ($content->getAllContentValues() as $key => $value) {
                 // マッピングがあればそれを使用、なければオリジナルのキー名を使用
                 $mappedKey = $mapping[$key] ?? $key;
-                $item[$mappedKey] = $value;
+                // スキーマから表示名を取得
+                $fieldSchema = $this->getFieldSchema($masterId, $key);
+                $viewName = $fieldSchema['view_name'] ?? $key;
+                $item[$mappedKey] = [
+                    'value' => $value,
+                    'view_name' => $viewName
+                ];
             }
             $result[] = (object)$item;
         }
@@ -469,5 +475,27 @@ class ContentDataService
         }
 
         return null;
+    }
+
+    /**
+     * コンテンツデータの公開状態を更新
+     */
+    public function updatePublicStatus($dataId, $publicFlg)
+    {
+        try {
+            $data = ContentData::findOrFail($dataId);
+            $data->public_flg = $publicFlg;
+            $data->save();
+
+            return [
+                'status' => 'success',
+                'mess' => $publicFlg == '1' ? 'データを公開しました。' : 'データを非公開にしました。'
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => 'error',
+                'mess' => 'データの更新に失敗しました: ' . $e->getMessage()
+            ];
+        }
     }
 }
