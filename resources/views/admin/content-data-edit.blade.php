@@ -441,6 +441,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // ドラッグ&ドロップファイル管理用のマップ
+    const dragDropFiles = new Map();
+
+    // カスタムFileListを作成する関数
+    function createFileList(files) {
+        const dt = new DataTransfer();
+        files.forEach(file => dt.items.add(file));
+        return dt.files;
+    }
+
     // ファイルアップロード処理
     const fileInputs = document.querySelectorAll('.file-upload-input');
 
@@ -496,21 +506,37 @@ document.addEventListener('DOMContentLoaded', function() {
             // ドラッグ&ドロップされたファイルをinput要素に設定
             if (files.length > 0) {
                 try {
-                    // FileListオブジェクトをinput.filesに設定
                     const fileArray = Array.from(files);
-                    
-                    // DataTransferを使用してFileListを作成
-                    const dataTransfer = new DataTransfer();
-                    fileArray.forEach(file => dataTransfer.items.add(file));
-                    input.files = dataTransfer.files;
-                    
-                    // ドラッグ&ドロップファイルを管理用マップに保存
-                    dragDropFiles.set(fieldName, fileArray);
-                    
+
                     if (isMultiple) {
-                        handleFiles(files);
+                        // 複数ファイルの場合、既存ファイルに追加（重複チェック）
+                        const currentFiles = dragDropFiles.get(fieldName) || [];
+                        const existingFileNames = currentFiles.map(f => f.name);
+                        const newFiles = fileArray.filter(f => !existingFileNames.includes(f.name));
+                        const combinedFiles = [...currentFiles, ...newFiles];
+
+                        console.log('ドラッグ&ドロップ - 既存ファイル:', existingFileNames);
+                        console.log('ドラッグ&ドロップ - 新規ファイル:', newFiles.map(f => f.name));
+                        console.log('ドラッグ&ドロップ - 結合後:', combinedFiles.map(f => f.name));
+
+                        dragDropFiles.set(fieldName, combinedFiles);
+
+                        // DataTransferを使用してFileListを作成
+                        const dataTransfer = new DataTransfer();
+                        combinedFiles.forEach(file => dataTransfer.items.add(file));
+                        input.files = dataTransfer.files;
+
+                        handleFiles(newFiles); // 新しいファイルのみプレビュー
                     } else {
-                        handleFiles([files[0]]);
+                        // 単一ファイルの場合は置き換え
+                        dragDropFiles.set(fieldName, [fileArray[0]]);
+
+                        // DataTransferを使用してFileListを作成
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(fileArray[0]);
+                        input.files = dataTransfer.files;
+
+                        handleFiles([fileArray[0]]);
                     }
                 } catch (error) {
                     console.error('ファイル設定エラー:', error);
@@ -522,24 +548,48 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             }
-        }
-
-        // ファイル選択処理
+        }        // ファイル選択処理
         input.addEventListener('change', function() {
-            if (isMultiple) {
-                handleFiles(this.files);
-            } else if (this.files.length > 0) {
-                handleFiles([this.files[0]]);
-            }
-        });
+            // 通常のファイル選択時のファイル管理
+            const fileArray = Array.from(this.files);
 
-        function handleFiles(files) {
+            if (isMultiple) {
+                // 複数ファイルの場合、既存ファイルに追加（重複チェック）
+                const currentFiles = dragDropFiles.get(fieldName) || [];
+                const existingFileNames = currentFiles.map(f => f.name);
+                const newFiles = fileArray.filter(f => !existingFileNames.includes(f.name));
+                const combinedFiles = [...currentFiles, ...newFiles];
+
+                console.log('ファイル選択 - 既存ファイル:', existingFileNames);
+                console.log('ファイル選択 - 新規ファイル:', newFiles.map(f => f.name));
+                console.log('ファイル選択 - 結合後:', combinedFiles.map(f => f.name));
+
+                dragDropFiles.set(fieldName, combinedFiles);
+
+                // input.filesを更新
+                try {
+                    const dataTransfer = new DataTransfer();
+                    combinedFiles.forEach(file => dataTransfer.items.add(file));
+                    this.files = dataTransfer.files;
+                } catch (error) {
+                    console.error('ファイル設定エラー:', error);
+                }
+
+                handleFiles(newFiles); // 新しいファイルのみプレビュー
+            } else {
+                // 単一ファイルの場合は置き換え
+                dragDropFiles.set(fieldName, fileArray);
+                handleFiles(this.files);
+            }
+        });function handleFiles(files) {
             if (!isMultiple) {
                 // 単一ファイルの場合は新しいプレビューをクリア
                 const newPreviews = previewContainer.querySelectorAll('.file-preview-item.new-file');
                 newPreviews.forEach(preview => preview.remove());
             }
 
+            // ファイル管理はhandleDrop/changeイベントで既に実行済みなので、
+            // ここではプレビュー表示のみを行う
             [...files].forEach(file => {
                 if (file.type.match('image.*')) {
                     const reader = new FileReader();
@@ -567,10 +617,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         removeBtn.type = 'button';
                         removeBtn.addEventListener('click', function(e) {
                             e.preventDefault();
+                            console.log('ファイル削除前:', dragDropFiles.get(fieldName));
                             preview.remove();
 
                             // ファイル削除後にinput.filesを更新
-                            updateInputFiles(input, previewContainer);
+                            updateInputFiles(input, previewContainer, fieldName);
+                            console.log('ファイル削除後:', dragDropFiles.get(fieldName));
                         });
 
                         preview.appendChild(img);
@@ -600,50 +652,49 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // ドラッグ&ドロップファイル管理用のマップ
-    const dragDropFiles = new Map();
+    // input.filesを更新する関数（引数にfieldNameを追加）
+    function updateInputFiles(input, previewContainer, fieldName) {
+        const newFilePreviews = previewContainer.querySelectorAll('.file-preview-item.new-file');
 
-    // カスタムFileListを作成する関数
-    function createFileList(files) {
-        const dt = new DataTransfer();
-        files.forEach(file => dt.items.add(file));
-        return dt.files;
-    }        // input.filesを更新する関数
-        function updateInputFiles(input, previewContainer) {
-            const newFilePreviews = previewContainer.querySelectorAll('.file-preview-item.new-file');
-            
-            if (newFilePreviews.length === 0) {
-                // ファイルがない場合はinput.valueを空にする
-                input.value = '';
-                dragDropFiles.delete(fieldName);
-                
-                // 必須フィールドの場合、required属性を復活
-                if (input.hasAttribute('data-required')) {
-                    input.setAttribute('required', '');
+        if (newFilePreviews.length === 0) {
+            // ファイルがない場合はinput.valueを空にする
+            input.value = '';
+            dragDropFiles.delete(fieldName);
+
+            // 必須フィールドの場合、required属性を復活
+            if (input.hasAttribute('data-required')) {
+                input.setAttribute('required', '');
+            }
+        } else {
+            // 残りのファイルでFileListを再構築
+            const remainingFiles = dragDropFiles.get(fieldName) || [];
+            const remainingFileNames = Array.from(newFilePreviews).map(preview =>
+                preview.getAttribute('data-file-name')
+            ).filter(name => name);
+
+            const filteredFiles = remainingFiles.filter(file =>
+                remainingFileNames.includes(file.name)
+            );
+
+            // dragDropFilesを更新
+            dragDropFiles.set(fieldName, filteredFiles);
+
+            if (filteredFiles.length > 0) {
+                try {
+                    const dataTransfer = new DataTransfer();
+                    filteredFiles.forEach(file => dataTransfer.items.add(file));
+                    input.files = dataTransfer.files;
+                } catch (error) {
+                    console.error('ファイル更新エラー:', error);
+                    // フォールバック: input.valueを空にして再度ファイル選択を促す
+                    input.value = '';
                 }
             } else {
-                // 残りのファイルでFileListを再構築
-                const remainingFiles = dragDropFiles.get(fieldName) || [];
-                const remainingFileNames = Array.from(newFilePreviews).map(preview => 
-                    preview.getAttribute('data-file-name')
-                ).filter(name => name);
-                
-                const filteredFiles = remainingFiles.filter(file => 
-                    remainingFileNames.includes(file.name)
-                );
-                
-                if (filteredFiles.length > 0) {
-                    try {
-                        const dataTransfer = new DataTransfer();
-                        filteredFiles.forEach(file => dataTransfer.items.add(file));
-                        input.files = dataTransfer.files;
-                        dragDropFiles.set(fieldName, filteredFiles);
-                    } catch (error) {
-                        console.error('ファイル更新エラー:', error);
-                    }
-                }
+                // フィルタリング後にファイルがない場合は空にする
+                input.value = '';
             }
         }
+    }
 
     // 配列フィールドの処理
     const arrayFieldContainers = document.querySelectorAll('.array-field-container');
@@ -805,6 +856,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.querySelector('.data-form');
     if (form) {
         form.addEventListener('submit', function(e) {
+            console.log('フォーム送信時のファイル状態:', dragDropFiles);
+
             // ドラッグ&ドロップファイルが確実に送信されるよう確認
             dragDropFiles.forEach((files, fieldName) => {
                 const input = document.getElementById(fieldName);
@@ -813,6 +866,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         const dataTransfer = new DataTransfer();
                         files.forEach(file => dataTransfer.items.add(file));
                         input.files = dataTransfer.files;
+
+                        console.log(`フォーム送信 - ${fieldName}:`, files.map(f => f.name));
                     } catch (error) {
                         console.error('フォーム送信時のファイル設定エラー:', error);
                     }
