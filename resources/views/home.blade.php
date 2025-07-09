@@ -23,18 +23,19 @@
         - 75% 100% は楕円の幅と高さを、at 50% 100% は楕円の中心を（下端中央に）指定します。
         - この値をお好みで調整することで、山の急さや広がりを変更できます。
         --}}
-        <div class="absolute -bottom-10 w-full h-48 md:h-64 lg:h-80 pointer-events-none"
-            style="z-index: 1; clip-path: ellipse(75% 100% at 25% 100%);">
-
+        <div class="absolute -bottom-20 w-full h-48 md:h-64 lg:h-80 pointer-events-none"
+            style="z-index: 1; clip-path: ellipse(90% 100% at 25% 100%);">
             <img src="{{ asset($imgUnder->file_path . $imgUnder->file_name) }}" alt="柄" class="w-full h-full object-cover">
         </div>
 
-        <div class="absolute -bottom-10 md:bottom-20 lg:bottom-30 left-1/2 transform -translate-x-1/2 z-10">
-            <a href="{{ route($button0->spare1) }}" class="flex justify-center">
-                <img src="{{ asset($button0->file_path . $button0->file_name) }}" alt="採用案内"
-                    class="md:h-20 h-48 transition transform hover:translate-y-1 hover:opacity-80"
-                    style="object-fit: contain;">
-            </a>
+        <div class="absolute inset-0 flex items-end justify-center pointer-events-none z-20">
+            <div class="mb-[5%] pointer-events-auto">
+                <a href="{{ route($button0->spare1) }}">
+                    <img src="{{ asset($button0->file_path . $button0->file_name) }}" alt="もっとみる"
+                        class="h-auto w-[70vw] max-w-xs md:max-w-md lg:max-w-lg transition transform hover:translate-y-1 hover:opacity-80"
+                        style="object-fit: contain;">
+                </a>
+            </div>
         </div>
     </div>
     {{-- <div class="w-full flex justify-center relative z-20" style="margin-top: -40px; margin-bottom: -40px;">
@@ -49,21 +50,21 @@
         {{-- タイトル --}}
         <div class="pt-8 mt-0 flex flex-row items-center gap-8 z-20">
             <img src="{{ asset($titleInitiatives->file_path . $titleInitiatives->file_name) }}" alt="タイトル"
-                class="lg:h-24 md:h-18 h-10" style="object-fit: contain;">
+                class="lg:h-24 md:h-18 h-8" style="object-fit: contain;">
         </div>
 
         <div class="container mx-auto px-4 flex flex-col items-center">
 
-            <div class="my-8 mb-4 md:mb-12 w-full max-w-5xl rounded-2xl p-4 md:p-12 relative"
+            <div class="my-8 mb-4 md:mb-12 w-full max-w-5xl rounded-2xl px-6 md:px-8 md:py-4 relative"
                 style="background-color: rgba(255, 255, 255, 0.7);">
 
                 <!-- 車の画像を白い枠の右上角（外側）に配置 -->
                 <img src="{{ asset($car->file_path . $car->file_name) }}" alt="車"
-                    class="absolute -top-20 -right-0 md:-top-30 md:h-30 h-20 z-10" style="object-fit: contain;">
+                    class="absolute -top-20 -right-0 md:-top-30 md:h-30 h-12 z-10" style="object-fit: contain;">
 
                 @foreach ($initiativeContents as $content)
                     <a href="{{ route('initiatives.detail', $content->id) }}"
-                        class="block py-6 px-4 border-b-2 border-green-800 last:border-b-0 transition duration-200 ease-in-out hover:opacity-75">
+                        class="block py-6 border-b-2 border-green-800 last:border-b-0 transition duration-200 ease-in-out hover:opacity-75">
 
                         {{--
                         ★変更点
@@ -98,8 +99,8 @@
                                 - text-lg md:text-3xl でタイトルの文字サイズを画面幅に応じて変更。
                                 - mb-1 md:mb-4 でタイトルの下の余白を調整。
                                 --}}
-                                <h2 class="mb-1 md:mb-4 text-lg md:text-3xl font-bold">{{ $content->attempt["value"] }}</h2>
-                                <div class="font-bold">
+                                <h2 class="mb-4 md:mb-8 text-sm md:text-3xl font-bold">{{ $content->attempt["value"] }}</h2>
+                                <div class="text-xs md:text-base ">
                                     {!! nl2br($content->home_content["value"]) !!}
                                 </div>
                             </div>
@@ -123,20 +124,20 @@
         style="background-image: url('{{ asset($background2->file_path . $background2->file_name) }}');">
         {{-- タイトル --}}
         <div class="pt-8 mt-0 flex flex-row items-center gap-8 z-20">
-            <img src="{{ asset($titleStores->file_path . $titleStores->file_name) }}" alt="タイトル"
-                class="lg:h-24 md:h-18 h-10" style="object-fit: contain;">
+            <img src="{{ asset($titleStores->file_path . $titleStores->file_name) }}" alt="タイトル" class="lg:h-24 md:h-18 h-8"
+                style="object-fit: contain;">
         </div>
 
         {{-- はくば薬局 --}}
         <a href="{{ route('stores') }}"
-            class="block mx-auto my-24 w-full xl:w-[70%] transition duration-300 hover:opacity-70 cursor-pointer">
+            class="block mx-auto my-8 md:my-24 w-full xl:w-[70%] transition duration-300 hover:opacity-70 cursor-pointer">
             <img src="{{ asset($storeImg1->file_path . $storeImg1->file_name) }}" alt="はくば薬局"
                 class="w-full transition duration-300 hover:brightness-110" style="object-fit: contain;">
         </a>
 
         {{-- 柏の葉キャンパス駅前店 --}}
         <a href="{{ route('stores') }}"
-            class="block mx-auto my-24 w-full xl:w-[70%] transition duration-300 hover:opacity-70 cursor-pointer">
+            class="block mx-auto my-8 md:my-24 w-full xl:w-[70%] transition duration-300 hover:opacity-70 cursor-pointer">
             <img src="{{ asset($storeImg2->file_path . $storeImg2->file_name) }}" alt="柏の葉キャンパス駅前店"
                 class="w-full transition duration-300 hover:brightness-110" style="object-fit: contain;">
         </a>

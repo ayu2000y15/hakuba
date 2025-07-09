@@ -13,13 +13,13 @@
         {{-- タイトル --}}
         <div class="pt-2 mt-0 flex flex-row items-center gap-8 z-20">
             <img src="{{ asset($titleInitiatives->file_path . $titleInitiatives->file_name) }}" alt="タイトル"
-                class="lg:h-24 md:h-18 h-10" style="object-fit: contain;">
+                class="lg:h-24 md:h-18 h-8" style="object-fit: contain;">
         </div>
 
         <div class="container mx-auto px-4 flex flex-col items-center relative">
             <div class="w-full max-w-4xl rounded-2xl relative" style="background-color: rgba(255, 255, 255, 0);">
                 <img src="{{ asset($car->file_path . $car->file_name) }}" alt="車"
-                    class="absolute -top-11 -right-0 md:-top-21 md:h-30 h-20 z-10" style="object-fit: contain;">
+                    class="absolute -top-4 -right-0 md:-top-21 md:h-30 h-12 z-10" style="object-fit: contain;">
 
                 {{-- 詳細コンテンツ --}}
                 <div class="mt-8 w-full max-w-4xl">
@@ -30,7 +30,7 @@
                             $imageCount = count($images);
                         @endphp
 
-                        <div class="rounded-2xl p-6 md:p-8" style="background-color: rgba(255, 255, 255, 0.7);">
+                        <div class="rounded-2xl p-6 md:p-8" style="background-color: rgba(255, 255, 255, 0.6);">
 
                             {{-- タイトル --}}
                             <h1 class="text-2xl md:text-4xl font-bold text-green-800 mb-6 text-left">
@@ -55,13 +55,6 @@
                                                 @endforeach
                                             </div>
 
-                                            <button type="button" id="prevBtn"
-                                                class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition duration-200"><i
-                                                    class="fas fa-chevron-left"></i></button>
-                                            <button type="button" id="nextBtn"
-                                                class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition duration-200"><i
-                                                    class="fas fa-chevron-right"></i></button>
-
                                             <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
                                                 @for($i = 0; $i < $imageCount; $i++)
                                                     <button type="button"
@@ -70,8 +63,20 @@
                                                 @endfor
                                             </div>
                                         </div>
-                                        <div class="text-center mt-2 text-green-800 text-sm"><span id="currentSlide">1</span> /
-                                            {{ $imageCount }}</div>
+                                        {{-- 画像下部のコントロール --}}
+                                        <div class="flex justify-between items-center mt-4">
+                                            <button type="button" id="prevBtn"
+                                                class="bg-green-800 text-white p-2 rounded-full hover:bg-green-700 transition duration-200">
+                                                <i class="fas fa-chevron-left"></i>
+                                            </button>
+                                            <div class="text-center text-green-800 text-sm">
+                                                <span id="currentSlide">1</span> / {{ $imageCount }}
+                                            </div>
+                                            <button type="button" id="nextBtn"
+                                                class="bg-green-800 text-white p-2 rounded-full hover:bg-green-700 transition duration-200">
+                                                <i class="fas fa-chevron-right"></i>
+                                            </button>
+                                        </div>
                                     @else
                                         {{-- 単一画像の場合 --}}
                                         {{-- ★ 変更点2: モーダルを開くための共通クラス 'clickable-image' を追加 --}}
@@ -92,7 +97,7 @@
                             </div>
 
                             {{-- 前後の投稿への移動ボタン --}}
-                            <div class="mt-8">
+                            <div class="mt-24">
                                 {{-- デスクトップ表示 --}}
                                 <div class="flex justify-between items-center">
                                     {{-- 前の投稿ボタン --}}

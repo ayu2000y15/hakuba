@@ -10,19 +10,19 @@
         {{-- タイトル --}}
         <div class="pt-2 mt-0 flex flex-row items-center gap-8 z-20">
             <img src="{{ asset($titleInitiatives->file_path . $titleInitiatives->file_name) }}" alt="タイトル"
-                class="lg:h-24 md:h-18 h-10" style="object-fit: contain;">
+                class="lg:h-24 md:h-18 h-8" style="object-fit: contain;">
         </div>
 
         <div class="container mx-auto px-4 flex flex-col items-center relative">
             <div class="w-full max-w-5xl rounded-2xl  relative" style="background-color: rgba(255, 255, 255, 0);">
                 <!-- 車の画像を白い枠の右上角（外側）に配置 -->
                 <img src="{{ asset($car->file_path . $car->file_name) }}" alt="車"
-                    class="absolute -top-11 -right-0 md:-top-21 md:h-30 h-20 z-10" style="object-fit: contain;">
+                    class="absolute -top-4 -right-0 md:-top-21 md:h-30 h-12 z-10" style="object-fit: contain;">
                 {{-- グリッドコンテナで2列表示を指定 --}}
                 <div class="mt-8 w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                     @foreach ($initiativeContents as $content)
                         {{-- 各コンテンツのコンテナ (白枠) --}}
-                        <div class="rounded-2xl p-6 md:p-8 flex flex-col" style="background-color: rgba(255, 255, 255, 0.7);">
+                        <div class="rounded-lg p-6 md:p-8 flex flex-col" style="background-color: rgba(255, 255, 255, 0.6);">
 
                             {{-- 画像 (上部) --}}
                             <div class="w-full mb-4">
@@ -31,7 +31,7 @@
                                         $contentImg = $content->attempt_img["value"][0];
                                     @endphp
                                     <img src="{{ asset($contentImg) }}" alt="コンテンツ画像"
-                                        class="w-full aspect-video object-cover shadow-lg rounded-lg" style="object-fit: contain;">
+                                        class="w-full aspect-video object-cover shadow-lg rounded-sm" style="object-fit: contain;">
                                 @endif
                             </div>
 
