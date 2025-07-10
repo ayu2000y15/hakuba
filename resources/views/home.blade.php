@@ -11,8 +11,9 @@
         <img src="{{ asset($imgMobile->file_path . $imgMobile->file_name) }}" alt="メインビジュアル"
             class="w-full h-auto sm:hidden">
 
-        <div class="absolute inset-0 flex justify-center items-center z-10 pointer-events-none" style="bottom: 50%;">
-            <div class="text-white text-3xl leading-relaxed md:text-6xl ">
+        <div
+            class="absolute inset-0 flex ml-12 md:ml-48 items-center z-10 pointer-events-none bottom-[50%] md:bottom-[60%]">
+            <div class="text-white text-2xl leading-relaxed md:text-6xl ">
                 {!! nl2br($TopText->content) !!}
             </div>
         </div>
@@ -142,10 +143,57 @@
                 class="w-full transition duration-300 hover:brightness-110" style="object-fit: contain;">
         </a>
 
+        {{-- ABOUT US （PC表示）--}}
+        <div class="relative w-full hidden md:block py-12 md:py-24">
+            <div class="pt-8 mt-0 flex flex-row items-center gap-8 z-20">
+                <img src="{{ asset($titleAbout->file_path . $titleAbout->file_name) }}" alt="タイトル"
+                    class="lg:h-24 md:h-18 h-8" style="object-fit: contain;">
+                <img src="{{ asset($balloon->file_path . $balloon->file_name) }}" alt="風船" class="ml-24 h-30 z-10"
+                    style="object-fit: contain;">
+            </div>
+
+            {{-- PC版レイアウト：左右2列構成 --}}
+            <div class="container mt-24 mx-auto px-8 flex items-center justify-center gap-16">
+                {{-- 左側：説明文エリア --}}
+                <div class="flex-1 text-center">
+                    <div class="text-4xl leading-loose font-semibold" style="color: rgb(128,130,133)">
+                        地域のみなさんに選ばれる<br>
+                        そんな薬局を目指しています。
+                    </div>
+                </div>
+
+                {{-- 右側：表示エリア (ボタンではなくdivに変更) --}}
+                <div class="flex-1 space-y-6 flex flex-col items-start">
+                    {{-- 各項目を表示のみに --}}
+                    <div class="text-white text-2xl w-full px-16 py-8 rounded-l-4xl shadow-lg block "
+                        style="background-color: rgb(38,167,225)">
+                        全店舗駅近
+                    </div>
+                    <div class="text-white text-2xl w-full px-16 py-8 rounded-l-4xl shadow-lg block "
+                        style="background-color: rgb(38,167,225)">
+                        若手スタッフが活躍中
+                    </div>
+                    <div class="text-white text-2xl w-full px-16 py-8 rounded-l-4xl shadow-lg block "
+                        style="background-color: rgb(38,167,225)">
+                        やりたい！をサポートする制度
+                    </div>
+                </div>
+            </div>
+
+            {{-- もっと見るボタン：中央配置 --}}
+            <div class="mt-20 mr-40 z-10 flex items-center justify-center">
+                <img src="{{ asset($bird2->file_path . $bird2->file_name) }}" alt="鳥" class="h-30 mr-12 z-10"
+                    style="object-fit: contain;">
+                <a href="{{ route($button3->spare1) }}">
+                    <img src="{{ asset($button3->file_path . $button3->file_name) }}" alt="もっとみる"
+                        class="md:h-20 h-12 transition transform hover:scale-105 hover:opacity-90">
+                </a>
+            </div>
+        </div>
     </div>
 
-    {{-- ABOUT US --}}
-    <div class="relative w-full">
+    {{-- ABOUT US （スマホ表示）--}}
+    <div class="relative w-full block md:hidden">
         <img src="{{ asset($background3->file_path . $background3->file_name) }}" alt="ABOUT US"
             class="w-full h-auto object-cover">
         <div class="absolute inset-0 flex items-end justify-center pointer-events-none">
@@ -159,33 +207,44 @@
         </div>
     </div>
 
-    {{-- 採用案内 --}}
-    <div class="relative">
+    {{-- 採用案内 （PC表示）--}}
+    <div class="py-4 md:py-24 bg-cover bg-top bg-no-repeat hidden lg:block"
+        style="background-image: url('{{ asset($recruitBackground->file_path . $recruitBackground->file_name) }}');">
+        <div class="pt-8 mt-0 flex flex-row items-center gap-8 z-20">
+            <img src="{{ asset($titleRecruit->file_path . $titleRecruit->file_name) }}" alt="タイトル"
+                class="lg:h-24 md:h-18 h-8" style="object-fit: contain;">
+        </div>
+
+        <div class="container mx-auto px-8 flex items-center justify-center gap-6 my-12">
+            <img src="{{ asset($person2->file_path . $person2->file_name) }}" alt="人1" class="mr-8 h-90 z-10"
+                style="object-fit: contain;">
+            <div class="space-y-6 flex flex-col items-center">
+
+                <div class="text-center text-4xl leading-loose font-semibold" style="color: rgb(128,130,133)">
+                    薬局はくばでは、<br>
+                    一緒に働く仲間を<br>
+                    募集しています。
+                </div>
+                <div class="mt-20 z-10 flex items-center justify-center">
+                    <a href="{{ route($button4->spare1) }}">
+                        <img src="{{ asset($button4->file_path . $button4->file_name) }}" alt="もっとみる"
+                            class="md:h-20 h-12 transition transform hover:scale-105 hover:opacity-90">
+                    </a>
+                </div>
+            </div>
+            <img src="{{ asset($person1->file_path . $person1->file_name) }}" alt="人2" class="ml-8 h-90 z-10"
+                style="object-fit: contain;">
+        </div>
+
+        {{-- もっと見るボタン：中央配置 --}}
+
+    </div>
+
+
+    {{-- 採用案内 （スマホ表示） --}}
+    <div class="relative block lg:hidden">
         <img src="{{ asset($background4->file_path . $background4->file_name) }}" alt="タイトル" class=" w-full h-auto"
             style="object-fit: contain;">
-        {{-- タイトル --}}
-        {{-- <div class="pt-8 mt-0 flex flex-row items-center gap-8 z-20">
-            <img src="{{ asset($titleRecruit->file_path . $titleRecruit->file_name) }}" alt="タイトル"
-                class="lg:h-24 md:h-18 h-10" style="object-fit: contain;">
-        </div> --}}
-
-        {{-- <div class="flex w-full justify-center my-4 md:my-24">
-            <div class="flex flex-row items-center justify-center md:gap-8 w-[80%]">
-                <img src="{{ asset($person2->file_path . $person2->file_name) }}" alt="人2"
-                    class="w-30 md:w-60 lg:w-80 xl:w-120 object-contain" />
-                <div class="flex-1 px-4 flex flex-col justify-center">
-                    <div class="text-xs md:text-[24px] xl:text-[48px] text-center w-full mt-30 md:mt-0 md:mb-6"
-                        style="font-weight: 600;color:rgb(128,130,133)">
-                        薬局はくばでは、<br>
-                        一緒に働く仲間を<br>
-                        募集しています。
-                    </div>
-
-                </div>
-                <img src="{{ asset($person1->file_path . $person1->file_name) }}" alt="人1"
-                    class="w-25 md:w-50 lg:w-70 xl:w-100 object-contain" />
-            </div>
-        </div> --}}
 
         <div class="absolute inset-0 flex items-end justify-center pointer-events-none">
             <div class="mb-[10%] pointer-events-auto">

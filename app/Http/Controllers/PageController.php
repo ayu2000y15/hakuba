@@ -107,6 +107,14 @@ class PageController extends Controller
         $storeImg1 = Image::where('view_flg', 'HOME_store_img1')->first();
         $storeImg2 = Image::where('view_flg', 'HOME_store_img2')->first();
 
+        $backgroundPc = Image::where('view_flg', 'HOME_background2')->first();
+
+        $titleStores = Image::where('view_flg', 'TITLE_stores')->first();
+        $balloon = Image::where('view_flg', 'ICON_balloon')->first();
+        $storeImg1 = Image::where('view_flg', 'HOME_store_img1')->first();
+        $storeImg2 = Image::where('view_flg', 'HOME_store_img2')->first();
+        $businessHour1 = Image::where('view_flg', 'STORES_Business1')->first();
+        $businessHour2 = Image::where('view_flg', 'STORES_Business2')->first();
 
         return view('stores', compact(
             'logo1',
@@ -117,7 +125,14 @@ class PageController extends Controller
             'menuButton',
             'background',
             'storeImg1',
-            'storeImg2'
+            'storeImg2',
+            'backgroundPc',
+            'titleStores',
+            'balloon',
+            'storeImg1',
+            'storeImg2',
+            'businessHour1',
+            'businessHour2'
         ));
     }
 
@@ -137,7 +152,17 @@ class PageController extends Controller
         $menuButton = Image::where('view_flg', 'MENU_button1')->first();
 
         $background = Image::where('view_flg', 'ABOUT_background')->first();
+        $backgroundPc = Image::where('view_flg', 'HOME_background2')->first();
 
+        $titleAbout = Image::where('view_flg', 'TITLE_about')->first();
+        $balloon = Image::where('view_flg', 'ICON_balloon')->first();
+
+        $content1 = Image::where('view_flg', 'ABOUT_content1')->first();
+        $content2 = Image::where('view_flg', 'ABOUT_content2')->first();
+        $content3 = Image::where('view_flg', 'ABOUT_content3')->first();
+        $content4 = Image::where('view_flg', 'ABOUT_content4')->first();
+
+        $button = Image::where('view_flg', 'ABOUT_button')->first();
 
         return view('about', compact(
             'logo1',
@@ -146,7 +171,15 @@ class PageController extends Controller
             'menuTitle',
             'menuItem',
             'menuButton',
-            'background'
+            'background',
+            'backgroundPc',
+            'titleAbout',
+            'balloon',
+            'content1',
+            'content2',
+            'content3',
+            'content4',
+            'button'
         ));
     }
 
@@ -182,6 +215,11 @@ class PageController extends Controller
 
         $titleRecruit = Image::where('view_flg', 'TITLE_recruit')->first();
 
+        $qa = Image::where('view_flg', 'RECRUIT_QA')->orderBy('priority')->get();
+        $person = Image::where('view_flg', 'RECRUIT_person')->first();
+        $titleBg = Image::where('view_flg', 'RECRUIT_titlebg')->first();
+        $mailIcon = Image::where('view_flg', 'ICON_mail')->first();
+
 
         return view('recruit', compact(
             'logo1',
@@ -195,7 +233,11 @@ class PageController extends Controller
             'celebrationMoney',
             'background',
             'titleRecruit',
-            'background2'
+            'background2',
+            'qa',
+            'person',
+            'titleBg',
+            'mailIcon'
         ));
     }
 

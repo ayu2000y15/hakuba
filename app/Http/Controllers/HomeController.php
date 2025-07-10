@@ -59,11 +59,17 @@ class HomeController extends Controller
         $background4 = Image::where('view_flg', 'HOME_background4')->first();
         $button4 = Image::where('view_flg', 'HOME_button4')->first();
 
+        // 採用案内背景
+        $recruitBackground = Image::where('view_flg', 'RECRUIT_background')->first();
+
+
         // アイコン画像
         $bird = Image::where('view_flg', 'ICON_bird')->first();
         $car = Image::where('view_flg', 'ICON_car')->first();
         $person1 = Image::where('view_flg', 'HOME_person1')->first();
         $person2 = Image::where('view_flg', 'HOME_person2')->first();
+        $balloon = Image::where('view_flg', 'ICON_balloon')->first();
+        $bird2 = Image::where('view_flg', 'ICON_bird2')->first();
 
         // 本文
         $TopText = HpText::where('hp_text_id', 'HOME_TOP')->first();
@@ -106,7 +112,10 @@ class HomeController extends Controller
             'person1',
             'person2',
             'initiativeContents',
-            'imgSoil'
+            'imgSoil',
+            'balloon',
+            'bird2',
+            'recruitBackground'
         ));
     }
 }

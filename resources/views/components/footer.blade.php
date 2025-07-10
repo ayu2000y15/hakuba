@@ -12,7 +12,7 @@
                     @foreach ($menuItem as $item)
                         {{-- リンク本体 --}}
                         <a href="{{ route($item->spare1) }}" class="py-2 md:py-0">
-                            <img src="{{ asset($item->file_path . $item->file_name) }}" alt=""
+                            <img src="{{ asset($item->file_path . $item->file_name) }}" alt="{{ $item->comment }}"
                                 class="h-6 hover:opacity-80 transition-opacity">
                         </a>
 

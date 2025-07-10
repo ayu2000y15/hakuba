@@ -30,7 +30,7 @@
             <nav class="hidden md:flex space-x-6">
                 @foreach ($menuItem as $item)
                     <a href="{{ route($item->spare1) }}" class="py-2">
-                        <img src="{{ asset($item->file_path . $item->file_name) }}" alt="{{-- 適切なaltテキスト --}}"
+                        <img src="{{ asset($item->file_path . $item->file_name) }}" alt="{{ $item->comment }}"
                             class="h-6 hover:opacity-80 transition-opacity">
                     </a>
                 @endforeach
@@ -78,7 +78,7 @@
             <nav class="w-full flex flex-col items-start space-y-4">
                 @foreach ($menuItem as $item)
                     <a href="{{ route($item->spare1) }}" class="py-2">
-                        <img src="{{ asset($item->file_path . $item->file_name) }}" alt="{{-- 適切なaltテキスト --}}"
+                        <img src="{{ asset($item->file_path . $item->file_name) }}" alt="{{ $item->comment }}"
                             class="h-8 hover:opacity-80 transition-opacity">
                     </a>
                     @if (!$loop->last)
