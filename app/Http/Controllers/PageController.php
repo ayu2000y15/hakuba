@@ -38,7 +38,8 @@ class PageController extends Controller
         $titleInitiatives = Image::where('view_flg', 'TITLE_initiatives')->first();
         $car = Image::where('view_flg', 'ICON_car')->first();
 
-        $background1 = Image::where('view_flg', 'HOME_background1')->first();
+        $background1 = Image::where('view_flg', 'INI_background')->first();
+
         $options = [
             ['priority', true],
             ['created_at', true]
@@ -84,7 +85,7 @@ class PageController extends Controller
             'initiativeContents',
             'titleInitiatives',
             'car',
-            'pagination'
+            'pagination',
         ));
     }
 
@@ -258,7 +259,7 @@ class PageController extends Controller
         $titleInitiatives = Image::where('view_flg', 'TITLE_initiatives')->first();
         $car = Image::where('view_flg', 'ICON_car')->first();
 
-        $background1 = Image::where('view_flg', 'HOME_background1')->first();
+        $background1 = Image::where('view_flg', 'INI_background')->first();
         $btnBackground = Image::where('view_flg', 'BUTTON_bg')->first();
 
         // 特定のコンテンツを取得

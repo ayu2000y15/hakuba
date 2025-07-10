@@ -65,10 +65,12 @@
         </button>
 
         <div class="relative mb-10">
-            <div class="flex justify-center items-center">
-                <img src="{{ asset($logo1->file_path . $logo1->file_name) }}" alt="ロゴ" class="h-10">
-                <img src="{{ asset($logo2->file_path . $logo2->file_name) }}" alt="薬局はくば" class="h-10 ml-2">
-            </div>
+            <a href="/" aria-label="トップページへ">
+                <div class="flex justify-center items-center">
+                    <img src="{{ asset($logo1->file_path . $logo1->file_name) }}" alt="ロゴ" class="h-10">
+                    <img src="{{ asset($logo2->file_path . $logo2->file_name) }}" alt="薬局はくば" class="h-10 ml-2">
+                </div>
+            </a>
             <div class="flex justify-center items-center">
                 <img src="{{ asset($menuTitle->file_path . $menuTitle->file_name) }}" alt="タイトル" class="h-9 mt-12 ">
             </div>

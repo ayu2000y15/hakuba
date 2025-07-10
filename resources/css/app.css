@@ -14,3 +14,12 @@
 body {
     font-family: "Kiwi Maru", serif; /* フォールバックとしてserifを指定 */
 }
+
+.main-visual {
+    mask-image: linear-gradient(to bottom, transparent 0%, black 15%);
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        black 20%
+    ); /* Safariブラウザ対応 */
+}

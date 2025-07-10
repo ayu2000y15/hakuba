@@ -1,5 +1,5 @@
 <div
-    class="grid grid-cols-[80px,1fr] md:grid-cols-[140px,1fr] gap-x-1 gap-y-3 md:gap-x-6 md:gap-y-5 text-xs md:text-base lg:text-xl items-start">
+    class="grid grid-cols-[80px,1fr] md:grid-cols-[100px,1fr] gap-x-1 gap-y-3 md:gap-x-6 md:gap-y-5 text-xs md:text-base lg:text-xl items-start">
 
     <div class="font-bold text-right flex justify-between items-center ">
         @php
@@ -72,8 +72,8 @@
     <div class="font-bold text-right flex justify-between items-center">
         @php
             $textLength = mb_strlen($recruitment->salary_notes["view_name"]);
-            $justifyStyleMobile = $textLength == 5 ? 'letter-spacing: 0.1em; text-align: center;' : 'letter-spacing: 0.15em; text-align-last: justify;';
-            $justifyStyleDesktop = $textLength == 5 ? 'letter-spacing: 0.15em; text-align: center;' : 'letter-spacing: 0.3em; text-align-last: justify;';
+            $justifyStyleMobile = $textLength == 6 ? 'letter-spacing: 0.1em; text-align: center;' : 'letter-spacing: 0.15em; text-align-last: justify;';
+            $justifyStyleDesktop = $textLength == 6 ? 'letter-spacing: 0.15em; text-align: center;' : 'letter-spacing: 0.3em; text-align-last: justify;';
         @endphp
         <span class="block md:hidden"
             style="{{ $justifyStyleMobile }} flex: 1;">{{ $recruitment->salary_notes["view_name"] }}</span>

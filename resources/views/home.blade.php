@@ -7,9 +7,12 @@
 
     {{-- メインビジュアル --}}
     <div class="relative w-full overflow-hidden">
-        <img src="{{ asset($imgPc->file_path . $imgPc->file_name) }}" alt="メインビジュアル" class="w-full h-auto hidden sm:block">
-        <img src="{{ asset($imgMobile->file_path . $imgMobile->file_name) }}" alt="メインビジュアル"
-            class="w-full h-auto sm:hidden">
+        <div class="relative w-full overflow-hidden main-visual">
+            <img src="{{ asset($imgPc->file_path . $imgPc->file_name) }}" alt="メインビジュアル"
+                class="w-full h-auto hidden sm:block">
+            <img src="{{ asset($imgMobile->file_path . $imgMobile->file_name) }}" alt="メインビジュアル"
+                class="w-full h-auto sm:hidden">
+        </div>
 
         <div
             class="absolute inset-0 flex ml-12 md:ml-48 items-center z-10 pointer-events-none bottom-[50%] md:bottom-[60%]">
@@ -25,14 +28,14 @@
         - この値をお好みで調整することで、山の急さや広がりを変更できます。
         --}}
         <div class="absolute -bottom-20 w-full h-48 md:h-64 lg:h-80 pointer-events-none"
-            style="z-index: 1; clip-path: ellipse(90% 100% at 25% 100%);">
+            style="z-index: 10; clip-path: ellipse(90% 100% at 25% 100%);">
             <img src="{{ asset($imgUnder->file_path . $imgUnder->file_name) }}" alt="柄" class="w-full h-full object-cover">
         </div>
 
         <div class="absolute inset-0 flex items-end justify-center pointer-events-none z-20">
             <div class="mb-[5%] pointer-events-auto">
                 <a href="{{ route($button0->spare1) }}">
-                    <img src="{{ asset($button0->file_path . $button0->file_name) }}" alt="もっとみる"
+                    <img src="{{ asset($button0->file_path . $button0->file_name) }}" alt="採用案内"
                         class="h-auto w-[70vw] max-w-xs md:max-w-md lg:max-w-lg transition transform hover:translate-y-1 hover:opacity-80"
                         style="object-fit: contain;">
                 </a>
@@ -45,7 +48,7 @@
     </div> --}}
 
     {{-- 薬局はくばの取り組み --}}
-    <div class="py-4 md:py-24 bg-cover bg-top bg-no-repeat"
+    <div class="-mt-1 md:-mt-4 xl:-mt-5 py-4 md:py-24 bg-cover bg-top bg-no-repeat"
         style="background-image: url('{{ asset($background1->file_path . $background1->file_name) }}');">
 
         {{-- タイトル --}}
