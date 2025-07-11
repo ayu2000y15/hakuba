@@ -160,6 +160,59 @@
         text-decoration-thickness: 2px;
     }
 
+    /* 取り組み詳細コンテンツ内のテーブルスタイル */
+    .initiative-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5rem 0;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .initiative-content table thead {
+        background-color: #166534; /* bg-green-800 */
+        color: white;
+    }
+
+    .initiative-content table th,
+    .initiative-content table td {
+        padding: 12px 16px;
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb;
+        border-right: 1px solid #e5e7eb;
+        vertical-align: top;
+    }
+
+    /* 最後の列の右ボーダーを削除 */
+    .initiative-content table th:last-child,
+    .initiative-content table td:last-child {
+        border-right: none;
+    }
+
+    .initiative-content table th {
+        font-weight: 600;
+        font-size: 0.9rem;
+        letter-spacing: 0.025em;
+    }
+
+    .initiative-content table tbody tr {
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    .initiative-content table tbody tr:hover {
+        background-color: rgba(34, 197, 94, 0.05); /* hover:bg-green-50 */
+    }
+
+    .initiative-content table tbody tr:nth-child(even) {
+        background-color: rgba(249, 250, 251, 0.8); /* bg-gray-50 */
+    }
+
+    .initiative-content table tbody tr:nth-child(odd) {
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+
     /* PC/スマホ対応 */
     @media (max-width: 768px) {
         .initiative-content a {
@@ -168,6 +221,46 @@
 
         .initiative-content a:hover {
             text-decoration-thickness: 1.5px;
+        }
+
+        /* モバイル用テーブルスタイル */
+        .initiative-content table {
+            font-size: 0.875rem;
+            margin: 1rem 0;
+        }
+
+        .initiative-content table th,
+        .initiative-content table td {
+            padding: 8px 12px;
+        }
+
+        .initiative-content table th {
+            font-size: 0.8rem;
+        }
+
+        /* 小さい画面ではテーブルを横スクロール可能にする */
+        .initiative-content table {
+            min-width: 100%;
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .initiative-content table thead,
+        .initiative-content table tbody,
+        .initiative-content table tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+    }
+
+    /* 極小画面用 */
+    @media (max-width: 480px) {
+        .initiative-content table th,
+        .initiative-content table td {
+            padding: 6px 8px;
+            font-size: 0.8rem;
         }
     }
 </style>
