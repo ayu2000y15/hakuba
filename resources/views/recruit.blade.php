@@ -47,9 +47,9 @@
                                 <a href="#"
                                     class="block w-full px-4 py-3 rounded-t-2xl border-b-0 transition-colors duration-300"
                                     :class="{
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                'bg-custom-orange-active text-custom-brown': activeTab === {{ $loop->iteration }},
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    'bg-custom-orange-inactive text-custom-brown hover:bg-orange-300': activeTab !== {{ $loop->iteration }}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                'bg-custom-orange-active text-custom-brown': activeTab === {{ $loop->iteration }},
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    'bg-custom-orange-inactive text-custom-brown hover:bg-orange-300': activeTab !== {{ $loop->iteration }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }">
                                     {{-- ループ内の$recruitmentから動的にテキストをセット --}}
                                     <p class="text-base md:text-xl font-bold">
                                         {{ $recruitment->industry['value'] }}<br>
@@ -140,13 +140,13 @@
                 <img src="{{ asset($qaTitle->file_path . $qaTitle->file_name) }}" alt="タイトル" class="h-10"
                     style="object-fit: contain;">
             </div>
-            <div class="my-4 flex justify-end">
+            <div class="my-4 ml-8 flex justify-end">
                 <a href="mailto:some88@outlook.jp?subject=【HPからのお問い合わせ】" class="transition-opacity hover:opacity-80">
-                    <img src="{{ asset($mailMobile->file_path . $mailMobile->file_name) }}" alt="" class="h-55"
+                    <img src="{{ asset($mailMobile->file_path . $mailMobile->file_name) }}" alt="" class="h-35"
                         style="object-fit: contain;">
                 </a>
             </div>
-            <div class="mx-8 my-12">
+            <div class="mx-2 my-12">
                 <img src="{{ asset($qaContent->file_path . $qaContent->file_name) }}" alt="" class="w-full mx-auto "
                     style="object-fit: contain;">
             </div>
