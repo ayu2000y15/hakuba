@@ -292,6 +292,9 @@
             }
         }
     </style>
+
+    {{-- ページ固有のスタイル --}}
+    @yield('styles')
 </head>
 
 <body>

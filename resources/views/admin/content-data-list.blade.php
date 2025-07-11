@@ -2,6 +2,10 @@
 
 @section('title', $master->title . ' - データ一覧')
 
+@section('styles')
+    <link rel="stylesheet" href="{{ asset('css/rich-text-content.css') }}">
+@endsection
+
 @section('content')
     <div class="d-flex justify-content-between align-items-center page-title mb-4">
         <h2>{{ $master->title }} - データ一覧</h2>
@@ -261,7 +265,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="richtextPreviewContent" class="richtext-preview-content">
+                    <div id="richtextPreviewContent" class="richtext-preview-content initiative-content">
                         <!-- リッチテキストの内容がここに表示されます -->
                     </div>
                 </div>
@@ -327,67 +331,51 @@
             min-height: 200px;
             max-height: 70vh;
             overflow-y: auto;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
+            overflow-x: hidden; /* 横スクロールを防ぐ */
+            font-family: "Kiwi Maru", serif; /* フォールバックとしてserifを指定 */
             line-height: 1.6;
+            word-wrap: break-word; /* 長い単語を改行 */
+            color: #166534; /* text-green-800 */
         }
 
-        .richtext-preview-content h1,
-        .richtext-preview-content h2,
-        .richtext-preview-content h3,
-        .richtext-preview-content h4,
-        .richtext-preview-content h5,
-        .richtext-preview-content h6 {
-            margin-top: 1.5rem;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
+        /* プレビュー内の画像とテーブルの横スクロール対策 */
+        .richtext-preview-content * {
+            max-width: 100% !important;
+            box-sizing: border-box;
         }
 
-        .richtext-preview-content p {
-            margin-bottom: 1rem;
+        /* プレビュー内のリンクとテーブル行の文字色統一 */
+        .richtext-preview-content a {
+            color: #166534 !important; /* text-green-800 */
         }
 
-        .richtext-preview-content img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 4px;
-            margin: 10px 0;
+        .richtext-preview-content table tbody tr,
+        .richtext-preview-content table tbody td {
+            color: #166534 !important; /* text-green-800 */
         }
 
         .richtext-preview-content table {
+            table-layout: auto !important;
+            overflow-x: auto;
+            display: block;
+            white-space: nowrap;
+        }
+
+        .richtext-preview-content table thead,
+        .richtext-preview-content table tbody {
+            display: table;
             width: 100%;
-            border-collapse: collapse;
-            margin: 1rem 0;
         }
 
-        .richtext-preview-content table th,
-        .richtext-preview-content table td {
-            border: 1px solid #dee2e6;
-            padding: 8px 12px;
-        }
+        @media (max-width: 768px) {
+            .richtext-preview-content table {
+                font-size: 0.875rem;
+            }
 
-        .richtext-preview-content table th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-        }
-
-        .richtext-preview-content blockquote {
-            border-left: 4px solid #0d6efd;
-            margin: 1rem 0;
-            padding-left: 1rem;
-            font-style: italic;
-            background-color: #f8f9fa;
-            padding: 1rem;
-            border-radius: 4px;
-        }
-
-        .richtext-preview-content ul,
-        .richtext-preview-content ol {
-            margin: 1rem 0;
-            padding-left: 2rem;
-        }
-
-        .richtext-preview-content li {
-            margin-bottom: 0.5rem;
+            .richtext-preview-content table th,
+            .richtext-preview-content table td {
+                padding: 8px 12px;
+            }
         }
     </style>
 @endsection

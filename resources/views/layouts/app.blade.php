@@ -15,6 +15,9 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    {{-- ページ固有のスタイル --}}
+    @yield('styles')
+
 </head>
 
 <body class="font-sans antialiased text-gray-800">
