@@ -78,7 +78,7 @@ class HomeController extends Controller
             ['priority', true],
             ['created_at', true]
         ];
-        $initiativeContents = $this->contentData->getContentByMasterId('T004', 3, [], $options);
+        $initiativeContents = $this->contentData->getContentByMasterId('T002', 3, [], $options);
 
 
         return view('home', compact(

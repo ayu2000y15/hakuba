@@ -103,6 +103,18 @@
                                                             <div class="text-content" style="max-height: 100px; overflow-y: auto;">
                                                                 {!! nl2br(e($item->content[$field['col_name']])) !!}
                                                             </div>
+                                                        @elseif($field['type'] == 'richtext')
+                                                            @if(!empty($item->content[$field['col_name']]))
+                                                                <button type="button" class="btn btn-sm btn-outline-primary richtext-preview-btn"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#richtextPreviewModal"
+                                                                        data-content="{{ base64_encode($item->content[$field['col_name']]) }}"
+                                                                        data-title="{{ $field['view_name'] }}">
+                                                                    <i class="fas fa-eye"></i> プレビュー
+                                                                </button>
+                                                            @else
+                                                                <span class="text-muted">内容なし</span>
+                                                            @endif
                                                         @elseif($field['type'] == 'file')
                                                             @if(!empty($item->content[$field['col_name']]))
                                                                 <a href="{{ asset($item->content[$field['col_name']]) }}" target="_blank"
@@ -240,6 +252,26 @@
         </div>
     </div>
 
+    <!-- リッチテキストプレビューモーダル -->
+    <div class="modal fade" id="richtextPreviewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="richtextPreviewTitle">リッチテキストプレビュー</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="richtextPreviewContent" class="richtext-preview-content">
+                        <!-- リッチテキストの内容がここに表示されます -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <style>
         /* データ一覧のスタイル改善 */
         .table-primary th {
@@ -280,6 +312,83 @@
             transform: scale(1.05);
             border-color: #0d6efd;
         }
+
+        /* リッチテキストプレビューのスタイル */
+        .richtext-preview-btn {
+            border-radius: 20px;
+            padding: 0.25rem 0.75rem;
+        }
+
+        .richtext-preview-content {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 200px;
+            max-height: 70vh;
+            overflow-y: auto;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        .richtext-preview-content h1,
+        .richtext-preview-content h2,
+        .richtext-preview-content h3,
+        .richtext-preview-content h4,
+        .richtext-preview-content h5,
+        .richtext-preview-content h6 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .richtext-preview-content p {
+            margin-bottom: 1rem;
+        }
+
+        .richtext-preview-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+
+        .richtext-preview-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .richtext-preview-content table th,
+        .richtext-preview-content table td {
+            border: 1px solid #dee2e6;
+            padding: 8px 12px;
+        }
+
+        .richtext-preview-content table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .richtext-preview-content blockquote {
+            border-left: 4px solid #0d6efd;
+            margin: 1rem 0;
+            padding-left: 1rem;
+            font-style: italic;
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+        }
+
+        .richtext-preview-content ul,
+        .richtext-preview-content ol {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+
+        .richtext-preview-content li {
+            margin-bottom: 0.5rem;
+        }
     </style>
 @endsection
 
@@ -297,6 +406,66 @@
                     e.preventDefault();
                     previewImage.src = this.href;
                     previewModal.show();
+                });
+            });
+
+            // リッチテキストプレビュー機能
+            const richtextPreviewBtns = document.querySelectorAll('.richtext-preview-btn');
+            const richtextPreviewModal = new bootstrap.Modal(document.getElementById('richtextPreviewModal'));
+            const richtextPreviewTitle = document.getElementById('richtextPreviewTitle');
+            const richtextPreviewContent = document.getElementById('richtextPreviewContent');
+
+            richtextPreviewBtns.forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    const title = this.dataset.title;
+                    const encodedContent = this.dataset.content;
+
+                    try {
+                        // Base64デコード（UTF-8対応 - 方法1: TextDecoder使用）
+                        const binaryString = atob(encodedContent);
+                        const bytes = new Uint8Array(binaryString.length);
+                        for (let i = 0; i < binaryString.length; i++) {
+                            bytes[i] = binaryString.charCodeAt(i);
+                        }
+                        const decoder = new TextDecoder('utf-8');
+                        const decodedContent = decoder.decode(bytes);
+
+                        // モーダルタイトルとコンテンツを設定
+                        richtextPreviewTitle.textContent = title + ' - プレビュー';
+                        richtextPreviewContent.innerHTML = decodedContent;
+
+                        // モーダルを表示
+                        richtextPreviewModal.show();
+                    } catch (error) {
+                        console.error('TextDecoderでのデコードに失敗しました:', error);
+
+                        // フォールバック1: decodeURIComponent + atob
+                        try {
+                            const decodedContent = decodeURIComponent(atob(encodedContent).split('').map(function(c) {
+                                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                            }).join(''));
+
+                            richtextPreviewTitle.textContent = title + ' - プレビュー';
+                            richtextPreviewContent.innerHTML = decodedContent;
+                            richtextPreviewModal.show();
+                        } catch (fallbackError1) {
+                            console.error('decodeURIComponentでのデコードに失敗しました:', fallbackError1);
+
+                            // フォールバック2: 直接atob
+                            try {
+                                const fallbackContent = atob(encodedContent);
+                                richtextPreviewTitle.textContent = title + ' - プレビュー';
+                                richtextPreviewContent.innerHTML = fallbackContent;
+                                richtextPreviewModal.show();
+                            } catch (fallbackError2) {
+                                console.error('すべてのデコード方法が失敗しました:', fallbackError2);
+                                richtextPreviewContent.innerHTML = '<p class="text-danger">コンテンツの表示に失敗しました。文字エンコーディングの問題の可能性があります。</p>';
+                                richtextPreviewModal.show();
+                            }
+                        }
+                    }
                 });
             });
 

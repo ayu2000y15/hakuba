@@ -26,9 +26,9 @@
 
                             {{-- 画像 (上部) --}}
                             <div class="w-full mb-4">
-                                @if (!empty($content->attempt_img["value"][0]))
+                                @if (!empty($content->attempt_img["value"]))
                                     @php
-                                        $contentImg = $content->attempt_img["value"][0];
+                                        $contentImg = $content->attempt_img["value"];
                                     @endphp
                                     <img src="{{ asset($contentImg) }}" alt="コンテンツ画像"
                                         class="w-full aspect-video object-cover shadow-lg rounded-sm" style="object-fit: contain;">

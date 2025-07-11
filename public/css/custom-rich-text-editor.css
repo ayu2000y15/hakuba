@@ -276,3 +276,181 @@
         display: none;
     }
 }
+
+/* CKEditor専用スタイル */
+
+/* エディタの基本スタイル */
+.ck.ck-editor {
+    width: 100%;
+}
+
+.ck.ck-editor__editable {
+    min-height: 300px;
+    max-height: 500px;
+    overflow-y: auto;
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    padding: 0.75rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.ck.ck-editor__editable:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    outline: 0;
+}
+
+/* ツールバーのスタイル */
+.ck.ck-toolbar {
+    border: 1px solid #ced4da;
+    border-bottom: none;
+    border-radius: 0.375rem 0.375rem 0 0;
+    background: #f8f9fa;
+    padding: 0.5rem;
+}
+
+.ck.ck-toolbar .ck-toolbar__items {
+    flex-wrap: wrap;
+}
+
+/* エディタメインエリア */
+.ck.ck-editor__main > .ck-editor__editable {
+    border-radius: 0 0 0.375rem 0.375rem;
+    border-top: none;
+}
+
+/* ドロップダウンメニューの調整 */
+.ck.ck-dropdown .ck-dropdown__panel {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* フォントサイズドロップダウンの調整 */
+.ck.ck-dropdown.ck-font-size-dropdown .ck-dropdown__panel {
+    min-width: 120px;
+}
+
+/* カラーパレットの調整 */
+.ck.ck-color-picker .ck-color-picker__row .ck-color-picker__tile {
+    width: 24px;
+    height: 24px;
+    margin: 2px;
+}
+
+/* テーブル関連の調整 */
+.ck.ck-editor__editable .ck-widget.table {
+    margin: 1em 0;
+}
+
+.ck.ck-editor__editable .ck-widget.table table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #bfbfbf;
+}
+
+.ck.ck-editor__editable .ck-widget.table table td,
+.ck.ck-editor__editable .ck-widget.table table th {
+    min-width: 2em;
+    padding: 0.4em;
+    border: 1px solid #bfbfbf;
+}
+
+/* 画像関連の調整 */
+.ck.ck-editor__editable .image {
+    display: table;
+    clear: both;
+    text-align: center;
+    margin: 1em auto;
+}
+
+.ck.ck-editor__editable .image img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    min-width: 50px;
+}
+
+.ck.ck-editor__editable .image-inline {
+    display: inline-block;
+    align-items: flex-start;
+}
+
+.ck.ck-editor__editable .image-inline img {
+    display: inline-block;
+}
+
+/* リンクの調整 */
+.ck.ck-editor__editable a {
+    color: #0d6efd;
+    text-decoration: underline;
+}
+
+.ck.ck-editor__editable a:hover {
+    color: #0a58ca;
+}
+
+/* リスト関連の調整 */
+.ck.ck-editor__editable ol,
+.ck.ck-editor__editable ul {
+    margin-left: 1.5em;
+    padding-left: 0;
+}
+
+.ck.ck-editor__editable ol li,
+.ck.ck-editor__editable ul li {
+    margin-bottom: 0.5em;
+}
+
+/* 見出しの調整 */
+.ck.ck-editor__editable h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.ck.ck-editor__editable h2 {
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.ck.ck-editor__editable h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.ck.ck-editor__editable h4 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.ck.ck-editor__editable h5 {
+    font-size: 1.125rem;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.ck.ck-editor__editable h6 {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .ck.ck-toolbar .ck-toolbar__items {
+        flex-wrap: wrap;
+    }
+
+    .ck.ck-editor__editable {
+        min-height: 200px;
+        font-size: 0.9rem;
+    }
+}

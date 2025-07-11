@@ -50,7 +50,7 @@ class PageController extends Controller
         $perPage = 6;
 
         // 全体のデータを取得
-        $allInitiativeContents = $this->contentData->getContentByMasterId('T004', 0, [], $options);
+        $allInitiativeContents = $this->contentData->getContentByMasterId('T002', 0, [], $options);
         $totalCount = count($allInitiativeContents);
 
         // ページネーション用にデータを分割
@@ -206,10 +206,8 @@ class PageController extends Controller
             ['priority', true],
             ['created_at', false]
         ];
-        $textRecruitment = $this->contentData->getContentByMasterId('T002', 0, [], $options);
-        $textRecruitmentLabel = $this->contentData->getContentWithSchema('T002');
-
-        $celebrationMoney = $this->contentData->getContentWithSchema('T003');
+        $textRecruitment = $this->contentData->getContentByMasterId('T001', 0, [], $options);
+        $textRecruitmentLabel = $this->contentData->getContentWithSchema('T001');
 
         $background = Image::where('view_flg', 'RECRUIT_background')->first();
         $background2 = Image::where('view_flg', 'RECRUIT_background2')->first();
@@ -221,6 +219,10 @@ class PageController extends Controller
         $titleBg = Image::where('view_flg', 'RECRUIT_titlebg')->first();
         $mailIcon = Image::where('view_flg', 'ICON_mail')->first();
 
+        $qaTitle = Image::where('view_flg', 'RECRUIT_qa_title')->first();
+        $qaContent = Image::where('view_flg', 'RECRUIT_qa_content')->first();
+        $mailMobile = Image::where('view_flg', 'RECRUIT_mail_mobile')->first();
+
 
         return view('recruit', compact(
             'logo1',
@@ -231,14 +233,16 @@ class PageController extends Controller
             'menuButton',
             'textRecruitment',
             'textRecruitmentLabel',
-            'celebrationMoney',
             'background',
             'titleRecruit',
             'background2',
             'qa',
             'person',
             'titleBg',
-            'mailIcon'
+            'mailIcon',
+            'qaTitle',
+            'qaContent',
+            'mailMobile'
         ));
     }
 
@@ -268,10 +272,10 @@ class PageController extends Controller
             ['created_at', true]
         ];
 
-        $initiativeContent = $this->contentData->getContentByMasterId('T004', 0, [], $options, $id);
+        $initiativeContent = $this->contentData->getContentByMasterId('T002', 0, [], $options, $id);
 
         // 前後の投稿を取得
-        $allInitiatives = $this->contentData->getContentByMasterId('T004', 0, [], $options);
+        $allInitiatives = $this->contentData->getContentByMasterId('T002', 0, [], $options);
         $currentIndex = -1;
         $previousPost = null;
         $nextPost = null;

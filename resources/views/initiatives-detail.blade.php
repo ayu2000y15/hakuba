@@ -24,11 +24,6 @@
                 {{-- 詳細コンテンツ --}}
                 <div class="mt-8 w-full max-w-4xl">
                     @if($initiativeContent)
-                        {{-- ★ 変更点1: 変数のスコープ問題を解決するため、画像枚数の計算をここで行う --}}
-                        @php
-                            $images = $initiativeContent->attempt_img["value"] ?? [];
-                            $imageCount = count($images);
-                        @endphp
 
                         <div class="rounded-2xl p-6 md:p-8" style="background-color: rgba(255, 255, 255, 0.6);">
 
@@ -37,62 +32,14 @@
                                 {{ $initiativeContent->attempt["value"] }}
                             </h1>
                             <hr class="border-green-800 border-2 mb-4 md:mb-12">
-
-                            {{-- メイン画像 --}}
-                            @if (!empty($images))
-                                <div class="mb-8 relative">
-                                    @if($imageCount > 1)
-                                        {{-- 複数画像の場合：スライドショー --}}
-                                        <div class="relative overflow-hidden rounded-lg shadow-lg">
-                                            <div class="flex transition-transform duration-300 ease-in-out" id="imageSlider">
-                                                @foreach($images as $index => $contentImg)
-                                                    <div class="w-full flex-shrink-0">
-                                                        {{-- ★ 変更点2: モーダルを開くための共通クラス 'clickable-image' を追加 --}}
-                                                        <img src="{{ asset($contentImg) }}" alt="コンテンツ画像 {{ $index + 1 }}"
-                                                            class="w-full aspect-video object-cover cursor-pointer clickable-image"
-                                                            style="object-fit: contain;" data-image-index="{{ $index }}">
-                                                    </div>
-                                                @endforeach
-                                            </div>
-
-                                            <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                                                @for($i = 0; $i < $imageCount; $i++)
-                                                    <button type="button"
-                                                        class="w-3 h-3 rounded-full bg-white bg-opacity-50 hover:bg-opacity-75 transition duration-200 dot-indicator {{ $i === 0 ? 'bg-opacity-100' : '' }}"
-                                                        data-slide="{{ $i }}"></button>
-                                                @endfor
-                                            </div>
-                                        </div>
-                                        {{-- 画像下部のコントロール --}}
-                                        <div class="flex justify-between items-center mt-4">
-                                            <button type="button" id="prevBtn"
-                                                class="bg-green-800 text-white p-2 rounded-full hover:bg-green-700 transition duration-200">
-                                                <i class="fas fa-chevron-left"></i>
-                                            </button>
-                                            <div class="text-center text-green-800 text-sm">
-                                                <span id="currentSlide">1</span> / {{ $imageCount }}
-                                            </div>
-                                            <button type="button" id="nextBtn"
-                                                class="bg-green-800 text-white p-2 rounded-full hover:bg-green-700 transition duration-200">
-                                                <i class="fas fa-chevron-right"></i>
-                                            </button>
-                                        </div>
-                                    @else
-                                        {{-- 単一画像の場合 --}}
-                                        {{-- ★ 変更点2: モーダルを開くための共通クラス 'clickable-image' を追加 --}}
-                                        <img src="{{ asset($images[0]) }}" alt="コンテンツ画像"
-                                            class="w-full aspect-video object-cover shadow-lg rounded-lg cursor-pointer clickable-image"
-                                            style="object-fit: contain;" data-image-index="0">
-                                    @endif
-                                </div>
-                            @endif
-
                             {{-- 詳細コンテンツ --}}
-                            <div class="text-green-800 text-base md:text-lg font-bold leading-relaxed">
+                            <div class="text-green-800 text-base md:text-lg leading-relaxed" >
                                 <div>
                                     <p>{!! nl2br($initiativeContent->home_content["value"]) !!}</p>
                                     <br><br>
-                                    <p>{!! nl2br($initiativeContent->attempt_content["value"]) !!}</p>
+                                    <div class="initiative-content">
+                                        {!! $initiativeContent->attempt_content["value"] !!}
+                                    </div>
                                 </div>
                             </div>
 
@@ -198,6 +145,33 @@
     @endif
 
 {{-- スライドショーのJavaScript --}}
+<style>
+    /* 取り組み詳細コンテンツ内のリンクスタイル */
+    .initiative-content a {
+        text-decoration: underline;
+        text-decoration-color: #166534; /* text-green-800 */
+        text-underline-offset: 3px;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .initiative-content a:hover {
+        color: #15803d; /* text-green-700 */
+        text-decoration-color: #15803d;
+        text-decoration-thickness: 2px;
+    }
+
+    /* PC/スマホ対応 */
+    @media (max-width: 768px) {
+        .initiative-content a {
+            text-underline-offset: 2px;
+        }
+
+        .initiative-content a:hover {
+            text-decoration-thickness: 1.5px;
+        }
+    }
+</style>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const totalSlides = {{ $imageCount ?? 0 }};

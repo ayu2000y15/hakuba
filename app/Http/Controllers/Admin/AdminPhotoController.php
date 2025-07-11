@@ -8,6 +8,7 @@ use App\Models\Image;
 use App\Models\ViewFlag;
 use App\Services\FileUploadService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class AdminPhotoController extends Controller
 {
@@ -20,25 +21,53 @@ class AdminPhotoController extends Controller
 
     public function index(Request $request)
     {
-        $viewFlg = ViewFlag::orderBy('view_flg')->get();
-        $photos = DB::table('images as img')
-            ->select(
-                'img.image_id as image_id',
-                'img.file_name as file_name',
-                'img.file_path as file_path',
-                'img.view_flg as view_flg',
-                'img.alt as alt',
-                'img.priority as priority',
-                'img.created_at as created_at',
-                'view.comment as v_comment'
-            )
-            ->join('view_flags as view', 'img.view_flg', '=', 'view.view_flg')
-            ->orderBy('img.view_flg')
-            ->orderByRaw('img.priority is null')
-            ->orderByRaw('img.priority = 0')
-            ->orderBy('img.priority')
-            ->orderBy('img.image_id')
-            ->get();
+        $accessId = Session::get('access_id');
+        if ($accessId == "0") {
+            $viewFlg = ViewFlag::orderBy('view_flg')->get();
+
+            $photos = DB::table('images as img')
+                ->select(
+                    'img.image_id as image_id',
+                    'img.file_name as file_name',
+                    'img.file_path as file_path',
+                    'img.view_flg as view_flg',
+                    'img.alt as alt',
+                    'img.priority as priority',
+                    'img.created_at as created_at',
+                    'view.comment as v_comment'
+                )
+                ->join('view_flags as view', 'img.view_flg', '=', 'view.view_flg')
+                ->orderBy('img.view_flg')
+                ->orderByRaw('img.priority is null')
+                ->orderByRaw('img.priority = 0')
+                ->orderBy('img.priority')
+                ->orderBy('img.image_id')
+                ->get();
+        } else {
+            $viewFlg = ViewFlag::where("spare1", "1")
+                ->orderBy('view_flg')->get();
+
+            $photos = DB::table('images as img')
+                ->select(
+                    'img.image_id as image_id',
+                    'img.file_name as file_name',
+                    'img.file_path as file_path',
+                    'img.view_flg as view_flg',
+                    'img.alt as alt',
+                    'img.priority as priority',
+                    'img.created_at as created_at',
+                    'view.comment as v_comment'
+                )
+                ->join('view_flags as view', 'img.view_flg', '=', 'view.view_flg')
+                ->where("view.spare1", "1")
+                ->orderBy('img.view_flg')
+                ->orderByRaw('img.priority is null')
+                ->orderByRaw('img.priority = 0')
+                ->orderBy('img.priority')
+                ->orderBy('img.image_id')
+                ->get();
+        }
+        $this->fileCheck($viewFlg);
 
         return view('admin.photo', compact('viewFlg', 'photos'));
     }
@@ -98,5 +127,40 @@ class AdminPhotoController extends Controller
         }
         return redirect()->route('admin.photo')
             ->with('error', '画像の削除に失敗しました。');
+    }
+
+    public function fileCheck($viewFlgList)
+    {
+        $cnt = 1;
+        $error = [];
+
+        foreach ($viewFlgList as $flg) {
+            $f = $flg->view_flg;
+            if ($f <> '00') {
+                $imgCnt = Image::where('view_flg', $f)->count();
+                $viewFlg = ViewFlag::where('view_flg', $f)->first();
+                $maxCnt = $viewFlg->max_count;
+                $comment = $viewFlg->comment;
+
+                if ($maxCnt == 0) {
+                    //max_countが0の場合、1枚も登録されていない場合はエラー
+                    if ($imgCnt == 0) {
+                        $error += [$f => ['error', '「' . $comment . '」の画像が1枚も登録されていません。1枚以上登録してください。']];
+                    }
+                } else {
+                    //max_countが0の場合、1枚も登録されていない場合はエラー
+                    if ($imgCnt == 0) {
+                        $error += [$f => ['error', '「' . $comment . '」が1枚も登録されていません。1枚以上登録してください。']];
+                    }
+
+                    //max_countより多く登録されている場合はエラー
+                    if ($imgCnt > $maxCnt) {
+                        $error += [$f => ['error', '「' . $comment . '」が' . $maxCnt . '枚より多く登録されています。' . $maxCnt . '枚以内で登録してください。']];
+                    }
+                }
+            }
+            $cnt++;
+        }
+        Session::flash('errors', $error);
     }
 }

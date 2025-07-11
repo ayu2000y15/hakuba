@@ -2,6 +2,87 @@
 
 @section('title', $master->title . ' - データ登録')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/custom-rich-text-editor.css') }}">
+<style>
+/* フォーム要素のスタイル改善 */
+.form-label {
+    font-weight: 500;
+}
+
+.required {
+    color: #dc3545;
+    font-size: 0.75rem;
+    vertical-align: middle;
+}
+
+/* ファイルアップロード関連のスタイル改善 */
+.file-upload-area {
+    border: 2px dashed #ddd;
+    padding: 30px;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.file-upload-area:hover,
+.file-upload-area.drag-over {
+    border-color: #0d6efd;
+    background-color: #f0f7ff;
+}
+
+.file-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.file-preview-item {
+    position: relative;
+    width: 150px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 8px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.file-preview-image {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+/* 配列フィールドのスタイル改善 */
+.array-item {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* リッチテキストエディタのスタイル */
+.richtext-editor-container {
+    margin-bottom: 1rem;
+}
+
+.ck-editor__editable {
+    min-height: 300px;
+}
+
+.ck.ck-toolbar {
+    border-radius: 0.375rem 0.375rem 0 0;
+}
+
+.ck.ck-editor__main>.ck-editor__editable {
+    border-radius: 0 0 0.375rem 0.375rem;
+}
+</style>
+@endpush
+
 @section('content')
 <div class="d-flex justify-content-between align-items-center page-title">
     <h2>{{ $master->title }} - データ登録</h2>
@@ -47,7 +128,7 @@
 
                 @foreach($sortedSchema as $field)
                     <div class="row mb-4">
-                        <div class="col-md-8">
+                        <div class="col-12">
                             <label for="{{ $field['col_name'] }}" class="form-label">
                                 {{ $field['view_name'] }}
                                 @if($field['required_flg'] == '1')
@@ -61,6 +142,13 @@
                                           class="form-control"
                                           rows="5"
                                           @if($field['required_flg'] == '1') required @endif>{{ old($field['col_name']) }}</textarea>
+                            @elseif($field['type'] == 'richtext')
+                                <div class="richtext-editor-container" data-field="{{ $field['col_name'] }}">
+                                    <textarea id="{{ $field['col_name'] }}"
+                                              name="{{ $field['col_name'] }}"
+                                              class="form-control richtext-editor"
+                                              @if($field['required_flg'] == '1') required @endif>{{ old($field['col_name']) }}</textarea>
+                                </div>
                             @elseif($field['type'] == 'select')
                                 <select id="{{ $field['col_name'] }}"
                                         name="{{ $field['col_name'] }}"
@@ -213,8 +301,254 @@
 @endsection
 
 @push('scripts')
+<!-- CKEditor CDN -->
+<script src="https://cdn.ckeditor.com/ckeditor5/40.1.0/classic/ckeditor.js"></script>
+
+<!-- SimpleUploadAdapter for CKEditor -->
+<script>
+class SimpleUploadAdapter {
+    constructor(loader) {
+        this.loader = loader;
+    }
+
+    upload() {
+        return this.loader.file
+            .then(file => new Promise((resolve, reject) => {
+                const data = new FormData();
+                data.append('upload', file);
+                data.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+
+                fetch('/admin/upload-image', {
+                    method: 'POST',
+                    body: data
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.uploaded) {
+                        resolve({
+                            default: result.url
+                        });
+                    } else {
+                        reject(result.error || 'Upload failed');
+                    }
+                })
+                .catch(error => {
+                    reject('Upload failed: ' + error.message);
+                });
+            }));
+    }
+
+    abort() {
+        // Handle upload abort
+    }
+}
+
+function SimpleUploadAdapterPlugin(editor) {
+    editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+        return new SimpleUploadAdapter(loader);
+    };
+}
+</script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // CKEditor初期化
+    const editors = {};
+
+    // CKEditorの設定
+    const editorConfig = {
+        extraPlugins: [SimpleUploadAdapterPlugin],
+        toolbar: {
+            items: [
+                'heading', '|',
+                'fontSize', 'fontColor', 'fontBackgroundColor', '|',
+                'bold', 'italic', 'underline', 'strikethrough', '|',
+                'link', 'imageInsert', 'imageUpload', '|',
+                'bulletedList', 'numberedList', '|',
+                'alignment', '|',
+                'indent', 'outdent', '|',
+                'insertTable', '|',
+                'undo', 'redo'
+            ],
+            shouldNotGroupWhenFull: true
+        },
+        fontSize: {
+            options: [
+                9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36
+            ],
+            supportAllValues: true
+        },
+        fontColor: {
+            colors: [
+                {
+                    color: 'hsl(0, 0%, 0%)',
+                    label: 'Black'
+                },
+                {
+                    color: 'hsl(0, 0%, 30%)',
+                    label: 'Dim grey'
+                },
+                {
+                    color: 'hsl(0, 0%, 60%)',
+                    label: 'Grey'
+                },
+                {
+                    color: 'hsl(0, 0%, 90%)',
+                    label: 'Light grey'
+                },
+                {
+                    color: 'hsl(0, 0%, 100%)',
+                    label: 'White',
+                    hasBorder: true
+                },
+                {
+                    color: 'hsl(0, 75%, 60%)',
+                    label: 'Red'
+                },
+                {
+                    color: 'hsl(30, 75%, 60%)',
+                    label: 'Orange'
+                },
+                {
+                    color: 'hsl(60, 75%, 60%)',
+                    label: 'Yellow'
+                },
+                {
+                    color: 'hsl(90, 75%, 60%)',
+                    label: 'Light green'
+                },
+                {
+                    color: 'hsl(120, 75%, 60%)',
+                    label: 'Green'
+                },
+                {
+                    color: 'hsl(150, 75%, 60%)',
+                    label: 'Aquamarine'
+                },
+                {
+                    color: 'hsl(180, 75%, 60%)',
+                    label: 'Turquoise'
+                },
+                {
+                    color: 'hsl(210, 75%, 60%)',
+                    label: 'Light blue'
+                },
+                {
+                    color: 'hsl(240, 75%, 60%)',
+                    label: 'Blue'
+                },
+                {
+                    color: 'hsl(270, 75%, 60%)',
+                    label: 'Purple'
+                }
+            ]
+        },
+        fontBackgroundColor: {
+            colors: [
+                {
+                    color: 'hsl(0, 0%, 100%)',
+                    label: 'White',
+                    hasBorder: true
+                },
+                {
+                    color: 'hsl(0, 0%, 90%)',
+                    label: 'Light grey'
+                },
+                {
+                    color: 'hsl(60, 75%, 90%)',
+                    label: 'Light yellow'
+                },
+                {
+                    color: 'hsl(120, 75%, 90%)',
+                    label: 'Light green'
+                },
+                {
+                    color: 'hsl(180, 75%, 90%)',
+                    label: 'Light cyan'
+                },
+                {
+                    color: 'hsl(240, 75%, 90%)',
+                    label: 'Light blue'
+                },
+                {
+                    color: 'hsl(300, 75%, 90%)',
+                    label: 'Light purple'
+                }
+            ]
+        },
+        image: {
+            toolbar: [
+                'imageTextAlternative', 'imageStyle:inline', 'imageStyle:block', 'imageStyle:side'
+            ]
+        },
+        table: {
+            contentToolbar: [
+                'tableColumn', 'tableRow', 'mergeTableCells'
+            ]
+        },
+        language: 'ja'
+    };
+
+    document.querySelectorAll('.richtext-editor').forEach(textarea => {
+        console.log('CKEditor初期化開始:', textarea.id);
+
+        ClassicEditor
+            .create(textarea, editorConfig)
+            .then(editor => {
+                editors[textarea.id] = editor;
+                console.log('CKEditor初期化完了:', textarea.id);
+
+                // エディタにフォーカスイベントを追加（バリデーションエラー対応）
+                editor.editing.view.document.on('change:isFocused', (evt, name, isFocused) => {
+                    if (isFocused) {
+                        // エディタがフォーカスされた時にtextareaも有効にする
+                        textarea.style.display = 'none';
+                        textarea.removeAttribute('required');
+                    }
+                });
+
+                // フォーム送信時にエディタの内容を同期
+                const form = textarea.closest('form');
+                if (form) {
+                    form.addEventListener('submit', function(e) {
+                        const editorData = editor.getData();
+                        textarea.value = editorData;
+                        console.log('フォーム送信時のエディタデータ:', textarea.id, editorData);
+
+                        // 必須フィールドのバリデーション
+                        if (textarea.hasAttribute('data-required') && !editorData.trim()) {
+                            e.preventDefault();
+                            alert(`${textarea.closest('.row').querySelector('label').textContent} は必須項目です。`);
+                            editor.editing.view.focus();
+                            return false;
+                        }
+                    });
+                }
+
+                // required属性をdata属性に移動（CKEditorが表示される時のバリデーションエラー回避）
+                if (textarea.hasAttribute('required')) {
+                    textarea.setAttribute('data-required', 'true');
+                    textarea.removeAttribute('required');
+                }
+            })
+            .catch(error => {
+                console.error('CKEditor初期化エラー:', textarea.id, error);
+                // エラー時は通常のtextareaとして表示
+                textarea.style.display = 'block';
+            });
+    });
+
+    // ページ離脱時にエディタを破棄
+    window.addEventListener('beforeunload', function() {
+        Object.values(editors).forEach(editor => {
+            if (editor) {
+                editor.destroy().catch(error => {
+                    console.error('Error destroying editor:', error);
+                });
+            }
+        });
+    });
+
     // ファイルアップロード処理
     const fileInputs = document.querySelectorAll('.file-upload-input');
 
@@ -385,6 +719,95 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (arrayItem.type === 'text') {
                     itemHtml += `
                         <input type="text"
+                               name="${fieldName}[${itemIndex}][${arrayItem.name}]"
+                               class="form-control"
+                               value="">
+                    `;
+                } else if (arrayItem.type === 'number') {
+                    itemHtml += `
+                        <input type="number"
+                               name="${fieldName}[${itemIndex}][${arrayItem.name}]"
+                               class="form-control"
+                               value="">
+                    `;
+                } else if (arrayItem.type === 'boolean') {
+                    itemHtml += `
+                        <div class="form-check">
+                            <input type="checkbox"
+                                   class="form-check-input"
+                                   id="${fieldName}_${itemIndex}_${arrayItem.name}"
+                                   name="${fieldName}[${itemIndex}][${arrayItem.name}]"
+                                   value="1">
+                            <label class="form-check-label" for="${fieldName}_${itemIndex}_${arrayItem.name}">
+                                有効
+                            </label>
+                        </div>
+                    `;
+                } else if (arrayItem.type === 'date') {
+                    itemHtml += `
+                        <input type="date"
+                               name="${fieldName}[${itemIndex}][${arrayItem.name}]"
+                               class="form-control"
+                               value="">
+                    `;
+                } else if (arrayItem.type === 'url') {
+                    itemHtml += `
+                    <label>
+                        <p>※YouTubeの共有ボタンより、埋め込むを選択して作成されたURLのsrcの部分を入力してください。<br>
+                        例、<br>＜iframe width="560" height="315" src="<span style="color: red;">https://www.youtube.com/embed/RAVDdfksdi</span>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen＞＜/iframe＞</p>
+                    </label>
+                        <input type="url"
+                               name="${fieldName}[${itemIndex}][${arrayItem.name}]"
+                               class="form-control"
+                               value=""
+                               placeholder="https://example.com">
+                    `;
+                }
+
+                itemHtml += `
+                    </div>
+                `;
+            });
+
+            itemHtml += `</div>`;
+
+            itemsContainer.insertAdjacentHTML('beforeend', itemHtml);
+
+            // 削除ボタンのイベントリスナーを設定
+            const removeButtons = itemsContainer.querySelectorAll('.remove-array-item');
+            const lastRemoveButton = removeButtons[removeButtons.length - 1];
+
+            lastRemoveButton.addEventListener('click', function() {
+                this.closest('.array-item').remove();
+                // インデックスを更新
+                updateArrayItemIndexes(fieldName);
+            });
+        });
+
+        // 既存の削除ボタンにイベントリスナーを設定
+        const removeButtons = container.querySelectorAll('.remove-array-item');
+        removeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                this.closest('.array-item').remove();
+                // インデックスを更新
+                updateArrayItemIndexes(fieldName);
+            });
+        });
+
+        // 配列項目のインデックスを更新する関数
+        function updateArrayItemIndexes(fieldName) {
+            const items = document.querySelectorAll(`#array-items-${fieldName} .array-item`);
+
+            items.forEach((item, index) => {
+                // タイトルを更新
+                const title = item.querySelector('h6');
+                if (title) {
+                    title.textContent = `項目 #${index + 1}`;
+                }
+
+                // 入力フィールドの名前属性を更新
+                const inputs = item.querySelectorAll('input');
+                inputs.forEach(input => {
                                name="${fieldName}[${itemIndex}][${arrayItem.name}]"
                                class="form-control"
                                value="">

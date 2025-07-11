@@ -16,9 +16,11 @@
 
         <div
             class="absolute inset-0 flex ml-12 md:ml-48 items-center z-10 pointer-events-none bottom-[50%] md:bottom-[60%]">
-            <div class="text-white text-2xl leading-relaxed md:text-6xl ">
+            <div class="text-white text-2xl leading-relaxed md:text-3xl xl:text-6xl ">
                 {!! nl2br($TopText->content) !!}
             </div>
+            <img src="{{ asset($bird->file_path . $bird->file_name) }}" alt="鳥"
+                class="ml-0 md:ml-8 mt-30 md:mt-40 xl:mt-70 h-10 xl:h-20" style="object-fit: contain;">
         </div>
         {{-- ★ 変更箇所：柄の画像 --}}
         {{--
@@ -42,14 +44,10 @@
             </div>
         </div>
     </div>
-    {{-- <div class="w-full flex justify-center relative z-20" style="margin-top: -40px; margin-bottom: -40px;">
-        <img src="{{ asset($imgSoil->file_path . $imgSoil->file_name) }}" alt="土" class="w-[120vw]"
-            style="object-fit:  contain; ">
-    </div> --}}
 
     {{-- 薬局はくばの取り組み --}}
     <div class="-mt-1 md:-mt-4 xl:-mt-5 py-4 md:py-24 bg-cover bg-top bg-no-repeat"
-        style="background-image: url('{{ asset($background1->file_path . $background1->file_name) }}');">
+        style="background-image: url('{{ asset($background1->file_path . $background1->file_name) }}'); clip-path: ellipse(250% 100% at 50% 0);">
 
         {{-- タイトル --}}
         <div class="pt-8 mt-0 flex flex-row items-center gap-8 z-20">
@@ -84,9 +82,11 @@
                             - flex-shrink-0 でテキストが長くても画像が縮まないように固定。
                             --}}
                             <div class="w-1/3 flex-shrink-0">
-                                @if (!empty($content->attempt_img["value"][0]))
+
+                                @if (!empty($content->attempt_img["value"]))
                                     @php
-                                        $contentImg = $content->attempt_img["value"][0];
+
+                                        $contentImg = $content->attempt_img["value"];
                                     @endphp
                                     <img src="{{ asset($contentImg) }}" alt="コンテンツ画像"
                                         class="w-full aspect-video object-cover shadow-lg" style="object-fit: contain;">
@@ -124,8 +124,8 @@
     </div>
 
     {{-- 店舗案内 --}}
-    <div class="py-4 md:py-24 bg-cover bg-top bg-no-repeat"
-        style="background-image: url('{{ asset($background2->file_path . $background2->file_name) }}');">
+    <div class="bg-cover bg-top bg-no-repeat pt-4 md:pt-24 py-4 -mt-4 md:-mt-6"
+        style="background-image: url('{{ asset($background2->file_path . $background2->file_name) }}'); ">
         {{-- タイトル --}}
         <div class="pt-8 mt-0 flex flex-row items-center gap-8 z-20">
             <img src="{{ asset($titleStores->file_path . $titleStores->file_name) }}" alt="タイトル" class="lg:h-24 md:h-18 h-8"

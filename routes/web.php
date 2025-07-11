@@ -73,3 +73,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 Route::delete('/admin/content-data/delete-file/{dataId}/{fieldName}/{index?}', [App\Http\Controllers\Admin\AdminContentDataController::class, 'deleteFile'])
     ->name('admin.content-data.delete-file');
+
+// CKEditor画像アップロード
+Route::post('/admin/upload-image', [App\Http\Controllers\Admin\AdminContentDataController::class, 'uploadImage'])
+    ->name('admin.upload-image');

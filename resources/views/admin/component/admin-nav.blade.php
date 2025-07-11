@@ -25,12 +25,6 @@
                             <i class="fas fa-table"></i> スキーマ設定
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('admin.photo*') ? 'active' : '' }}"
-                            href="{{ route('admin.photo') }}">
-                            <i class="fas fa-cloud-upload-alt"></i> HP画像管理
-                        </a>
-                    </li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.definition*') ? 'active' : '' }}"
                             href="{{ route('admin.definition') }}">
                             <i class="fas fa-table"></i> 汎用テーブル管理</a>
@@ -42,6 +36,12 @@
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.hptext*') ? 'active' : '' }}"
                         href="{{ route('admin.hptext') }}">
                         <i class="fas fa-table"></i> HPテキスト管理</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.photo*') ? 'active' : '' }}"
+                        href="{{ route('admin.photo') }}">
+                        <i class="fas fa-cloud-upload-alt"></i> HP画像管理
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.content-data*') ? 'active' : '' }}"

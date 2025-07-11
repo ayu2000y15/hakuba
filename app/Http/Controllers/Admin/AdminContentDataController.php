@@ -29,7 +29,7 @@ class AdminContentDataController extends Controller
             $masters = $this->contentMaster->getMasterAll();
             $allData = $this->contentData->getAllData();
         } else {
-            $masters = $this->contentMaster->getMasterInId("'T002','T004'");
+            $masters = $this->contentMaster->getMasterInId("'T001','T002'");
             $allData = $this->contentData->getAllData();
         }
 
@@ -433,6 +433,39 @@ class AdminContentDataController extends Controller
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * CKEditor用の画像アップロード
+     */
+    public function uploadImage(Request $request)
+    {
+        try {
+            $request->validate([
+                'upload' => 'required|image|max:10240', // 最大10MB
+            ]);
+
+            $file = $request->file('upload');
+
+            // ファイル名を生成（タイムスタンプ + ランダム文字列）
+            $fileName = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+
+            // storage/app/public/uploads/editor に保存
+            $filePath = $file->storeAs('uploads/editor', $fileName, 'public');
+
+            // 公開URLを生成
+            $url = asset('storage/' . $filePath);
+
+            return response()->json([
+                'url' => $url,
+                'uploaded' => true
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'uploaded' => false,
+                'message' => '画像のアップロードに失敗しました: ' . $e->getMessage()
+            ], 400);
         }
     }
 }
