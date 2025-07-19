@@ -18,12 +18,12 @@
     </div>
 
     {{-- PC表示 --}}
-    <div class="relative py-4 md:py-24 bg-cover bg-top bg-no-repeat hidden xl:block"
+    <div class="relative mx-auto py-4 md:py-24 bg-cover bg-top bg-no-repeat hidden xl:block"
         style="background-image: url('{{ asset($backgroundPc->file_path . $backgroundPc->file_name) }}');">
 
         <img src="{{ asset($titleAbout->file_path . $titleAbout->file_name) }}" alt="タイトル" class="lg:h-24 md:h-18 h-8"
             style="object-fit: contain;">
-        <div class="container mx-auto px-4 flex flex-col ">
+        <div class="container w-[80%] mx-auto px-4 flex flex-col ">
 
             <div class="relative mt-12 text-4xl leading-loose font-semibold" style="color: rgb(128,130,133)">
                 薬局はくばはスタッフ全員が楽しく・明るく働き、<br>
@@ -39,7 +39,7 @@
                     <div class="relative flex-col items-center">
                         <img src="{{ asset($content1->file_path . $content1->file_name) }}" alt="{{  $content1->comment }}"
                             class="mt-12 h-90 z-10" style="object-fit: contain;">
-                        <div class="text-xl leading-loose font-semibold " style="color: rgb(128,130,133)">
+                        <div class="text-xl leading-loose  " style="color: rgb(128,130,133)">
                             働く社員の負担を減らし、<br>
                             仕事とプライベートの両立をサポートしています。
                         </div>
@@ -49,7 +49,7 @@
                     <div class="relative  flex-col items-center">
                         <img src="{{ asset($content2->file_path . $content2->file_name) }}" alt="{{  $content2->comment }}"
                             class="mt-12 h-90 z-10" style="object-fit: contain;">
-                        <div class="text-xl leading-loose font-semibold" style="color: rgb(128,130,133)">
+                        <div class="text-xl leading-loose" style="color: rgb(128,130,133)">
                             子育て中の社員も多数在籍。<br>
                             ライフスタイルに合わせた働き方を支援しており、<br>
                             仕事と家庭の両立が可能な職場です
@@ -60,7 +60,7 @@
                     <div class="relative flex-col items-center">
                         <img src="{{ asset($content3->file_path . $content3->file_name) }}" alt="{{  $content3->comment }}"
                             class="mt-12 h-90 z-10" style="object-fit: contain;">
-                        <div class="text-xl leading-loose font-semibold" style="color: rgb(128,130,133)">
+                        <div class="text-xl leading-loose" style="color: rgb(128,130,133)">
                             社員一人ひとりの“やりたい”を尊重し、<br>
                             成長や挑戦を支える制度を整えています。<br>
                             スキルアップやキャリア形成を会社がバックアップします
@@ -71,7 +71,7 @@
                     <div class="relative flex-col items-center">
                         <img src="{{ asset($content4->file_path . $content4->file_name) }}" alt="{{  $content4->comment }}"
                             class="mt-12 h-100 z-10" style="object-fit: contain;">
-                        <div class="text-xl leading-loose font-semibold" style="color: rgb(128,130,133)">
+                        <div class="text-xl leading-loose" style="color: rgb(128,130,133)">
                             <span class="underline">主に扱う診療科</span><br>
                             小児科・皮膚科・耳鼻咽喉科・婦人科<br>
                             内科・呼吸器科・整形外科<br>

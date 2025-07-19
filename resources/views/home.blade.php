@@ -147,7 +147,7 @@
         </a>
 
         {{-- ABOUT US （PC表示）--}}
-        <div class="relative w-full hidden md:block py-12 md:py-24">
+        <div class="relative hidden lg:block py-12 md:py-24">
             <div class="pt-8 mt-0 flex flex-row items-center gap-8 z-20">
                 <img src="{{ asset($titleAbout->file_path . $titleAbout->file_name) }}" alt="タイトル"
                     class="lg:h-24 md:h-18 h-8" style="object-fit: contain;">
@@ -156,10 +156,10 @@
             </div>
 
             {{-- PC版レイアウト：左右2列構成 --}}
-            <div class="container mt-24 mx-auto px-8 flex items-center justify-center gap-16">
+            <div class="container w-[90%] mt-24 mx-auto px-8 flex items-center justify-center gap-16">
                 {{-- 左側：説明文エリア --}}
                 <div class="flex-1 text-center">
-                    <div class="text-4xl leading-loose font-semibold" style="color: rgb(128,130,133)">
+                    <div class="text-2xl xl:text-3xl leading-loose font-semibold" style="color: rgb(128,130,133)">
                         地域のみなさんに選ばれる<br>
                         そんな薬局を目指しています。
                     </div>
@@ -196,7 +196,7 @@
     </div>
 
     {{-- ABOUT US （スマホ表示）--}}
-    <div class="relative w-full block md:hidden">
+    <div class="relative w-full block lg:hidden">
         <img src="{{ asset($background3->file_path . $background3->file_name) }}" alt="ABOUT US"
             class="w-full h-auto object-cover">
         <div class="absolute inset-0 flex items-end justify-center pointer-events-none">
@@ -223,7 +223,7 @@
                 style="object-fit: contain;">
             <div class="space-y-6 flex flex-col items-center">
 
-                <div class="text-center text-4xl leading-loose font-semibold" style="color: rgb(128,130,133)">
+                <div class="text-center text-2xl xl:text-3xl leading-loose font-semibold" style="color: rgb(128,130,133)">
                     薬局はくばでは、<br>
                     一緒に働く仲間を<br>
                     募集しています。

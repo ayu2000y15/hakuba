@@ -24,7 +24,7 @@
             <img src="{{ asset($titleRecruit->file_path . $titleRecruit->file_name) }}" alt="タイトル"
                 class="lg:h-24 md:h-18 h-10" style="object-fit: contain;">
         </div>
-        <div class="container mx-auto p-4 py-12">
+        <div class="container w-[80%] mx-auto p-4 py-12">
             {{-- Add the content for your recruitment page here --}}
             <div class="mt-8 py-6 " style="background-color: #faf4dd">
                 <h2 class="text-2xl md:text-4xl text-center text-orange-400 mb-6">募集情報</h2>
@@ -47,9 +47,9 @@
                                 <a href="#"
                                     class="block w-full px-4 py-3 rounded-t-2xl border-b-0 transition-colors duration-300"
                                     :class="{
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                'bg-custom-orange-active text-custom-brown': activeTab === {{ $loop->iteration }},
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    'bg-custom-orange-inactive text-custom-brown hover:bg-orange-300': activeTab !== {{ $loop->iteration }}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        'bg-custom-orange-active text-custom-brown': activeTab === {{ $loop->iteration }},
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            'bg-custom-orange-inactive text-custom-brown hover:bg-orange-300': activeTab !== {{ $loop->iteration }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }">
                                     {{-- ループ内の$recruitmentから動的にテキストをセット --}}
                                     <p class="text-base md:text-xl font-bold">
                                         {{ $recruitment->industry['value'] }}<br>
@@ -83,7 +83,7 @@
                 <span class="pr-8 pt-4 pb-2 text-5xl bg-custom-orange-active underline" style="color: #fcebbe;">
                     　　　採用に関するお問い合わせ</span>
             </div>
-            <div class="container mx-auto ">
+            <div class="container w-[80%] mx-auto ">
                 <div class="relative mt-24 flex flex-row items-start justify-center" style="color: #f39e10;">
                     <div class="py-4 px-4 rounded-2xl flex-shrink-0 relative z-10"
                         style="background-color: rgba(255,255,255,0.6);">
@@ -108,7 +108,7 @@
                         <p class="text-xl">※正社員薬剤師100,000円 / パート薬剤師50,000円/パート医療事務20,000円</p>
                     </div>
                     <img src="{{ asset($person->file_path . $person->file_name) }}" alt="人"
-                        class="absolute 2xl:right-65 xl:right-30 right-0 -top-15 h-90 z-20  2xl:block"
+                        class="absolute 2xl:right-20 xl:right-0 right-0 -top-15 h-90 z-20  2xl:block"
                         style="object-fit: contain;">
                 </div>
 
@@ -137,12 +137,12 @@
         {{-- スマホ表示 --}}
         <div class="xl:hidden ">
             <div class="pt-2 mt-0 flex flex-row items-center gap-8 z-20">
-                <img src="{{ asset($qaTitle->file_path . $qaTitle->file_name) }}" alt="タイトル" class="h-10"
+                <img src="{{ asset($qaTitle->file_path . $qaTitle->file_name) }}" alt="タイトル" class="w-[80%]"
                     style="object-fit: contain;">
             </div>
-            <div class="my-4 ml-8 flex justify-end">
+            <div class="w-[80%] mx-auto my-4 flex justify-center">
                 <a href="mailto:some88@outlook.jp?subject=【HPからのお問い合わせ】" class="transition-opacity hover:opacity-80">
-                    <img src="{{ asset($mailMobile->file_path . $mailMobile->file_name) }}" alt="" class="h-35"
+                    <img src="{{ asset($mailMobile->file_path . $mailMobile->file_name) }}" alt="" class="w-full"
                         style="object-fit: contain;">
                 </a>
             </div>
