@@ -32,7 +32,7 @@
                     </div>
                     <div class="flex-1 text-xl leading-loose " style="color: rgb(128,130,133)">
                         <p class="text-base md:text-2xl font-semibold">薬局はくば</p>
-                        <p class="text-sm md:text-xl mt-2 md:mt-4">千葉県柏市若柴264番地1中央180街区1デュオセーヌ柏の葉キャンパス</p>
+                        <p class="text-sm md:text-xl mt-2 md:mt-4">千葉県柏市若柴264番地1中央180街区1<br>デュオセーヌ柏の葉キャンパス</p>
                         <p class="text-sm md:text-xl mt-2 md:mt-4">TEL : <a href="tel:04-7199-8988"
                                 class="text-gray-500 hover:text-gray-800 hover:underline transition-colors duration-200">04-7199-8988</a>
                             / FAX : 04-7199-8982</p>
