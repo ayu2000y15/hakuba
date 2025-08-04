@@ -35,8 +35,12 @@
                                         $imgInfo = getimagesize(public_path($contentImg));
                                         $isWide = $imgInfo[0] / $imgInfo[1] > 1.1;
                                     @endphp
+                                    @php
+                                        $ratio = round($imgInfo[0] / $imgInfo[1], 2);
+                                        $aspectClass = $ratio === 1.0 ? 'aspect-square' : ($ratio > 1.1 ? 'aspect-video' : 'aspect-[1/1.414]');
+                                    @endphp
                                     <img src="{{ asset($contentImg) }}" alt="コンテンツ画像"
-                                        class="w-full {{ $isWide ? 'aspect-video' : 'aspect-[1/1.414]' }} object-cover shadow-lg rounded-sm">
+                                        class="w-full {{ $aspectClass }} object-cover shadow-lg rounded-sm">
                                 @endif
                             </div>
 
@@ -67,10 +71,11 @@
                                     @php
                                         $contentImg = $content->attempt_img["value"];
                                         $imgInfo = getimagesize(public_path($contentImg));
-                                        $isWide = $imgInfo[0] / $imgInfo[1] > 1.1;
+                                        $ratio = round($imgInfo[0] / $imgInfo[1], 2);
+                                        $aspectClass = $ratio === 1.0 ? 'aspect-square' : ($ratio > 1.1 ? 'aspect-video' : 'aspect-[1/1.414]');
                                     @endphp
                                     <img src="{{ asset($contentImg) }}" alt="コンテンツ画像"
-                                        class="w-full {{ $isWide ? 'aspect-video' : 'aspect-[1/1.414]' }} object-cover shadow-lg rounded-sm">
+                                        class="w-full {{ $aspectClass }} object-cover shadow-lg rounded-sm">
                                 @endif
                             </div>
                             <div class="flex-1 text-left text-green-800 text-sm md:text-base flex flex-col">
@@ -98,10 +103,11 @@
                                     @php
                                         $contentImg = $content->attempt_img["value"];
                                         $imgInfo = getimagesize(public_path($contentImg));
-                                        $isWide = $imgInfo[0] / $imgInfo[1] > 1.1;
+                                        $ratio = round($imgInfo[0] / $imgInfo[1], 2);
+                                        $aspectClass = $ratio === 1.0 ? 'aspect-square' : ($ratio > 1.1 ? 'aspect-video' : 'aspect-[1/1.414]');
                                     @endphp
                                     <img src="{{ asset($contentImg) }}" alt="コンテンツ画像"
-                                        class="w-full {{ $isWide ? 'aspect-video' : 'aspect-[1/1.414]' }} object-cover shadow-lg rounded-sm">
+                                        class="w-full {{ $aspectClass }} object-cover shadow-lg rounded-sm">
                                 @endif
                             </div>
                             <div class="ml-8 flex-1 text-left text-green-800 text-sm md:text-base flex flex-col">
