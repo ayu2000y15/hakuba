@@ -81,15 +81,20 @@
                             - w-1/3 で常に左側3分の1の幅を確保。
                             - flex-shrink-0 でテキストが長くても画像が縮まないように固定。
                             --}}
-                            <div class="w-1/3 flex-shrink-0">
+                            <div class="w-1/4 flex-shrink-0">
 
                                 @if (!empty($content->attempt_img["value"]))
                                     @php
 
                                         $contentImg = $content->attempt_img["value"];
                                     @endphp
+                                    @php
+                                        // 画像サイズ取得（例: Storage::disk('public')->get($contentImg) などで取得可能。ここでは仮定）
+                                        $imgInfo = getimagesize(public_path($contentImg));
+                                        $isWide = $imgInfo[0] / $imgInfo[1] > 1.1; // 横長判定
+                                    @endphp
                                     <img src="{{ asset($contentImg) }}" alt="コンテンツ画像"
-                                        class="w-full aspect-video object-cover shadow-lg" style="object-fit: contain;">
+                                        class=" w-60 {{ $isWide ? 'aspect-video' : 'aspect-[1/1.414]' }} shadow-lg">
                                 @endif
                             </div>
 
