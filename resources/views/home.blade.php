@@ -89,12 +89,13 @@
                                         $contentImg = $content->attempt_img["value"];
                                     @endphp
                                     @php
-                                        // 画像サイズ取得（例: Storage::disk('public')->get($contentImg) などで取得可能。ここでは仮定）
+                                        // 画像サイズ取得
                                         $imgInfo = getimagesize(public_path($contentImg));
-                                        $isWide = $imgInfo[0] / $imgInfo[1] > 1.1; // 横長判定
+                                        $ratio = round($imgInfo[0] / $imgInfo[1], 2);
+                                        // 正方形(1:1)は aspect-square、横長は16:9、縦長はA4比にする
+                                        $aspectClass = $ratio === 1.0 ? 'aspect-square' : ($ratio > 1.1 ? 'aspect-video' : 'aspect-[1/1.414]');
                                     @endphp
-                                    <img src="{{ asset($contentImg) }}" alt="コンテンツ画像"
-                                        class=" w-60 {{ $isWide ? 'aspect-video' : 'aspect-[1/1.414]' }} shadow-lg">
+                                    <img src="{{ asset($contentImg) }}" alt="コンテンツ画像" class="w-60 {{ $aspectClass }} shadow-lg">
                                 @endif
                             </div>
 

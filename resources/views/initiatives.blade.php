@@ -23,47 +23,6 @@
                 <div class="mt-8 w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                     @foreach ($initiativeContents as $content)
                         {{-- 各コンテンツのコンテナ (白枠) --}}
-                        <div class="rounded-lg p-6 md:p-8 flex flex-col" style="background-color: rgba(255, 255, 255, 0.6);">
-
-                            {{-- 画像 (上部) --}}
-                            <div class="w-full mb-4">
-                                @if (!empty($content->attempt_img["value"]))
-                                    @php
-                                        $contentImg = $content->attempt_img["value"];
-                                    @endphp
-                                    @php
-                                        $imgInfo = getimagesize(public_path($contentImg));
-                                        $isWide = $imgInfo[0] / $imgInfo[1] > 1.1;
-                                    @endphp
-                                    @php
-                                        $ratio = round($imgInfo[0] / $imgInfo[1], 2);
-                                        $aspectClass = $ratio === 1.0 ? 'aspect-square' : ($ratio > 1.1 ? 'aspect-video' : 'aspect-[1/1.414]');
-                                    @endphp
-                                    <img src="{{ asset($contentImg) }}" alt="コンテンツ画像"
-                                        class="w-full {{ $aspectClass }} object-cover shadow-lg rounded-sm">
-                                @endif
-                            </div>
-
-                            {{-- テキストコンテンツ (下部) --}}
-                            <div class="flex-1 flex flex-col text-left text-green-800 text-sm md:text-base">
-                                <h2 class="mb-2 md:mb-4 text-lg md:text-2xl font-bold">{{ $content->attempt["value"] }}</h2>
-                                <div class=" mb-auto font-bold">
-                                    {!! nl2br($content->home_content["value"]) !!}
-                                </div>
-                                {{-- 「続きを読む」リンクを右寄せ --}}
-                                <a href="{{ route('initiatives.detail', $content->id) }}"
-                                    class="block mt-4 py-2 transition duration-200 ease-in-out hover:opacity-75 ml-auto w-fit">
-                                    <i class="fas fa-arrow-right"></i> 続きを読む
-                                </a>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-
-                <p class="mt-8">------------パターン2---------------</p>
-                <div class="mt-8 w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                    @foreach ($initiativeContents as $content)
-                        {{-- 各コンテンツのコンテナ (白枠) --}}
                         <div class="rounded-lg p-6 md:p-8 flex flex-row items-start gap-4 max-w-4xl mx-auto"
                             style="background-color: rgba(255, 255, 255, 0.6);">
                             <div class="w-1/3 flex-shrink-0">
@@ -91,39 +50,6 @@
                         </div>
                     @endforeach
                 </div>
-
-                <p class="mt-8">------------パターン3---------------</p>
-                <div class="mt-8 mx-auto w-full max-w-3xl grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
-                    @foreach ($initiativeContents as $content)
-                        {{-- 各コンテンツのコンテナ (白枠) --}}
-                        <div class="rounded-lg p-6 md:p-8 flex flex-row items-start gap-4 max-w-4xl mx-auto"
-                            style="background-color: rgba(255, 255, 255, 0.6);">
-                            <div class="w-1/3 flex-shrink-0">
-                                @if (!empty($content->attempt_img["value"]))
-                                    @php
-                                        $contentImg = $content->attempt_img["value"];
-                                        $imgInfo = getimagesize(public_path($contentImg));
-                                        $ratio = round($imgInfo[0] / $imgInfo[1], 2);
-                                        $aspectClass = $ratio === 1.0 ? 'aspect-square' : ($ratio > 1.1 ? 'aspect-video' : 'aspect-[1/1.414]');
-                                    @endphp
-                                    <img src="{{ asset($contentImg) }}" alt="コンテンツ画像"
-                                        class="w-full {{ $aspectClass }} object-cover shadow-lg rounded-sm">
-                                @endif
-                            </div>
-                            <div class="ml-8 flex-1 text-left text-green-800 text-sm md:text-base flex flex-col">
-                                <h2 class="mb-2 md:mb-4 text-lg md:text-2xl font-bold">{{ $content->attempt["value"] }}</h2>
-                                <div class="mb-auto font-bold">
-                                    {!! nl2br($content->home_content["value"]) !!}
-                                </div>
-                                <a href="{{ route('initiatives.detail', $content->id) }}"
-                                    class="block mt-4 py-2 transition duration-200 ease-in-out hover:opacity-75 ml-auto w-fit">
-                                    <i class="fas fa-arrow-right"></i> 続きを読む
-                                </a>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-
 
                 <!-- ページネーション -->
                 @if($pagination['total_pages'] > 1)
