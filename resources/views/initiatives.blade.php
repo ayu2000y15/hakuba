@@ -29,12 +29,9 @@
                                 @if (!empty($content->attempt_img["value"]))
                                     @php
                                         $contentImg = $content->attempt_img["value"];
-                                        $imgInfo = getimagesize(public_path($contentImg));
-                                        $ratio = round($imgInfo[0] / $imgInfo[1], 2);
-                                        $aspectClass = $ratio === 1.0 ? 'aspect-square' : ($ratio > 1.1 ? 'aspect-video' : 'aspect-[1/1.414]');
                                     @endphp
                                     <img src="{{ asset($contentImg) }}" alt="コンテンツ画像"
-                                        class="w-full {{ $aspectClass }} object-cover shadow-lg rounded-sm">
+                                        class="w-full h-auto object-contain shadow-lg rounded-sm">
                                 @endif
                             </div>
                             <div class="flex-1 text-left text-green-800 text-sm md:text-base flex flex-col">

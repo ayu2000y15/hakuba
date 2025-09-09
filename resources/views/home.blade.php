@@ -85,17 +85,9 @@
 
                                 @if (!empty($content->attempt_img["value"]))
                                     @php
-
                                         $contentImg = $content->attempt_img["value"];
                                     @endphp
-                                    @php
-                                        // 画像サイズ取得
-                                        $imgInfo = getimagesize(public_path($contentImg));
-                                        $ratio = round($imgInfo[0] / $imgInfo[1], 2);
-                                        // 正方形(1:1)は aspect-square、横長は16:9、縦長はA4比にする
-                                        $aspectClass = $ratio === 1.0 ? 'aspect-square' : ($ratio > 1.1 ? 'aspect-video' : 'aspect-[1/1.414]');
-                                    @endphp
-                                    <img src="{{ asset($contentImg) }}" alt="コンテンツ画像" class="w-60 {{ $aspectClass }} shadow-lg">
+                                    <img src="{{ asset($contentImg) }}" alt="コンテンツ画像" class="w-60 h-auto object-contain shadow-lg">
                                 @endif
                             </div>
 
