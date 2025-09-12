@@ -618,6 +618,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 previewContainer.innerHTML = '';
             }
 
+            // ドロップされたファイルをinput要素に設定
+            const dt = new DataTransfer();
+            [...files].forEach(file => {
+                dt.items.add(file);
+            });
+            input.files = dt.files;
+
             [...files].forEach(file => {
                 if (file.type.match('image.*')) {
                     const reader = new FileReader();
