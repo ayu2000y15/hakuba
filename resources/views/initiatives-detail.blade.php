@@ -4,6 +4,36 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/rich-text-content.css') }}">
+    <style>
+        /* initiatives-detail に埋め込まれた画像を均一に表示する。
+           - 最大横幅を揃えて中央寄せにする
+           - 高さは auto にして見切れないようにする
+           - インラインスタイルが入っている場合でも上書きするよう !important を使用
+        */
+        .initiative-content img,
+        .initiative-content figure img {
+            display: block;
+            margin: 1rem auto;
+            max-width: 720px; /* 必要なら値を調整してください */
+            width: 40% !important;
+            height: auto !important;
+            object-fit: contain;
+        }
+
+        /* 埋め込み動画や iframe のはみ出しも防止 */
+        .initiative-content iframe,
+        .initiative-content video,
+        .initiative-content embed {
+            max-width: 100%;
+            width: 100%;
+        }
+
+        /* 長いテーブルや要素の横スクロールを防ぎ、レスポンシブに */
+        .initiative-content {
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+    </style>
 @endsection
 
 @php
@@ -11,28 +41,28 @@
 @endphp
 
 @section('content')
-    <div class="relative py-4 md:py-24 bg-cover bg-top bg-no-repeat"
+    <div class="relative py-8 md:py-24 bg-cover bg-top bg-no-repeat"
         style="background-image: url('{{ asset($background1->file_path . $background1->file_name) }}');">
 
         {{-- タイトル --}}
-        <div class="pt-2 mt-0 flex flex-row items-center gap-8 z-20">
+        <div class="md:pt-0 pt-8  mt-0 flex flex-row items-center gap-8 z-20">
             <img src="{{ asset($titleInitiatives->file_path . $titleInitiatives->file_name) }}" alt="タイトル"
-                class="lg:h-24 md:h-18 h-8" style="object-fit: contain;">
+                class="md:h-18 h-12" style="object-fit: contain;">
         </div>
 
         <div class="container mx-auto px-4 flex flex-col items-center relative">
-            <div class="w-full max-w-4xl rounded-2xl relative" style="background-color: rgba(255, 255, 255, 0);">
+            <div class="w-full max-w-3xl rounded-2xl relative" style="background-color: rgba(255, 255, 255, 0);">
                 <img src="{{ asset($car->file_path . $car->file_name) }}" alt="車"
                     class="absolute -top-4 -right-0 md:-top-21 md:h-30 h-12 z-10" style="object-fit: contain;">
 
                 {{-- 詳細コンテンツ --}}
-                <div class="mt-8 w-full max-w-4xl">
+                <div class="mt-8 w-full max-w-4xl mx-auto">
                     @if($initiativeContent)
 
                         <div class="rounded-2xl p-6 md:p-8" style="background-color: rgba(255, 255, 255, 0.6);">
 
                             {{-- タイトル --}}
-                            <h1 class="text-2xl md:text-4xl font-bold text-green-800 mb-6 text-left">
+                            <h1 class="text-2xl font-bold text-green-800 mb-6 text-left">
                                 {{ $initiativeContent->attempt["value"] }}
                             </h1>
                             <hr class="border-green-800 border-2 mb-4 md:mb-12">

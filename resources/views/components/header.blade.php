@@ -1,15 +1,15 @@
 {{-- idを追加し、fixedやtransitionなどのクラスを設定 --}}
 <header id="main-header"
-    class="fixed top-0 left-0 right-0 z-40 bg-white py-4 shadow-sm transition-transform duration-300 ease-in-out">
+    class="fixed top-0 left-0 right-0 z-40 bg-white py-2 shadow-sm transition-transform duration-300 ease-in-out">
     <div class="container mx-auto px-4 flex justify-between items-center">
         {{-- 左側: ロゴ --}}
         <div class="flex-shrink-0">
             <a href="/" aria-label="トップページへ">
                 <div class="flex items-center">
                     {{-- PC表示：両方のロゴを表示 --}}
-                    <img src="{{ asset($logo1->file_path . $logo1->file_name) }}" alt="ロゴ" class="h-10 hidden md:block">
+                    <img src="{{ asset($logo1->file_path . $logo1->file_name) }}" alt="ロゴ" class="h-8 hidden md:block">
                     <img src="{{ asset($logo2->file_path . $logo2->file_name) }}" alt="薬局はくば"
-                        class="h-10 ml-2 hidden md:block">
+                        class="h-8 ml-2 hidden md:block">
 
                     {{-- スマホ表示：左側にlogo1のみ --}}
                     <img src="{{ asset($logo1->file_path . $logo1->file_name) }}" alt="ロゴ" class="h-8 md:hidden">
@@ -31,7 +31,7 @@
                 @foreach ($menuItem as $item)
                     <a href="{{ route($item->spare1) }}" class="py-2">
                         <img src="{{ asset($item->file_path . $item->file_name) }}" alt="{{ $item->comment }}"
-                            class="h-6 hover:opacity-80 transition-opacity">
+                            class="h-5 hover:opacity-80 transition-opacity">
                     </a>
                 @endforeach
             </nav>
@@ -41,7 +41,7 @@
         <div class="hidden md:block">
             <a href="{{ route($menuButton->spare1) }}" class="inline-block">
                 <img src="{{ asset($menuButton->file_path . $menuButton->file_name) }}" alt="採用案内"
-                    class="h-12 hover:opacity-80 transition-opacity">
+                    class="h-10 hover:opacity-80 transition-opacity">
             </a>
         </div>
 

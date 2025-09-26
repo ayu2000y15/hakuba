@@ -4,13 +4,13 @@
 
 @section('content')
     {{-- ★変更点1: 'relative'クラスを追加して、このdivを絶対配置の基準にする --}}
-    <div class="relative py-4 md:py-24 bg-cover bg-top bg-no-repeat"
+    <div class="relative py-8 md:py-24 bg-cover bg-top bg-no-repeat"
         style="background-image: url('{{ asset($background1->file_path . $background1->file_name) }}');">
 
         {{-- タイトル --}}
-        <div class="pt-2 mt-0 flex flex-row items-center gap-8 z-20">
+        <div class="md:pt-0 pt-8  mt-0 flex flex-row items-center gap-8 z-20">
             <img src="{{ asset($titleInitiatives->file_path . $titleInitiatives->file_name) }}" alt="タイトル"
-                class="lg:h-24 md:h-18 h-8" style="object-fit: contain;">
+                class="md:h-18 h-12" style="object-fit: contain;">
         </div>
 
         <div class="container mx-auto px-4 flex flex-col items-center relative">
@@ -34,9 +34,9 @@
                                         class="w-full h-auto object-contain shadow-lg rounded-sm">
                                 @endif
                             </div>
-                            <div class="flex-1 text-left text-green-800 text-sm md:text-base flex flex-col">
-                                <h2 class="mb-2 md:mb-4 text-lg md:text-2xl font-bold">{{ $content->attempt["value"] }}</h2>
-                                <div class="mb-auto font-bold">
+                            <div class="flex-1 text-left text-green-800  flex flex-col">
+                                <h2 class="mb-2 md:mb-4 text-lg md:text-xl font-bold">{{ $content->attempt["value"] }}</h2>
+                                <div class="mb-auto text-sm">
                                     {!! nl2br($content->home_content["value"]) !!}
                                 </div>
                                 <a href="{{ route('initiatives.detail', $content->id) }}"

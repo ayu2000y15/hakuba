@@ -52,12 +52,12 @@
         {{-- タイトル --}}
         <div class="pt-8 mt-0 flex flex-row items-center gap-8 z-20">
             <img src="{{ asset($titleInitiatives->file_path . $titleInitiatives->file_name) }}" alt="タイトル"
-                class="lg:h-24 md:h-18 h-8" style="object-fit: contain;">
+                class="md:h-18 h-12" style="object-fit: contain;">
         </div>
 
         <div class="container mx-auto px-4 flex flex-col items-center">
 
-            <div class="my-8 mb-4 md:mb-12 w-full max-w-5xl rounded-2xl px-6 md:px-8 md:py-4 relative"
+            <div class="my-8 mb-4 md:mb-12 w-full max-w-3xl rounded-2xl px-6 md:px-8 md:py-4 relative"
                 style="background-color: rgba(255, 255, 255, 0.7);">
 
                 <!-- 車の画像を白い枠の右上角（外側）に配置 -->
@@ -87,7 +87,7 @@
                                     @php
                                         $contentImg = $content->attempt_img["value"];
                                     @endphp
-                                    <img src="{{ asset($contentImg) }}" alt="コンテンツ画像" class="w-60 h-auto object-contain shadow-lg">
+                                    <img src="{{ asset($contentImg) }}" alt="コンテンツ画像" class="w-40 h-auto object-contain shadow-lg">
                                 @endif
                             </div>
 
@@ -95,13 +95,13 @@
                             テキストコンテナ
                             - text-sm md:text-base で本文の文字サイズを画面幅に応じて変更。
                             --}}
-                            <div class="flex-1 text-left text-green-800 text-sm md:text-base">
+                            <div class="flex-1 text-left text-green-800 ">
                                 {{--
                                 タイトル（h2）
                                 - text-lg md:text-3xl でタイトルの文字サイズを画面幅に応じて変更。
                                 - mb-1 md:mb-4 でタイトルの下の余白を調整。
                                 --}}
-                                <h2 class="mb-4 md:mb-8 text-sm md:text-3xl font-bold">{{ $content->attempt["value"] }}</h2>
+                                <h2 class="mb-4 md:mb-8 text-sm md:text-xl font-bold">{{ $content->attempt["value"] }}</h2>
                                 <div class="text-xs md:text-base ">
                                     {!! nl2br($content->home_content["value"]) !!}
                                 </div>
@@ -114,7 +114,7 @@
             <div class="mb-12 z-10">
                 <a href="{{ route($button1->spare1) }}" class="flex justify-center">
                     <img src="{{ asset($button1->file_path . $button1->file_name) }}" alt="もっとみる"
-                        class="md:h-20 h-12 transition transform hover:translate-y-1 hover:opacity-80">
+                        class="h-auto w-[60%] mx-auto max-w-xs md:max-w-md lg:max-w-lg transition transform hover:translate-y-1 hover:opacity-80">
                 </a>
             </div>
 
@@ -126,29 +126,29 @@
         style="background-image: url('{{ asset($background2->file_path . $background2->file_name) }}'); ">
         {{-- タイトル --}}
         <div class="pt-8 mt-0 flex flex-row items-center gap-8 z-20">
-            <img src="{{ asset($titleStores->file_path . $titleStores->file_name) }}" alt="タイトル" class="lg:h-24 md:h-18 h-8"
+            <img src="{{ asset($titleStores->file_path . $titleStores->file_name) }}" alt="タイトル" class=" md:h-18 h-12"
                 style="object-fit: contain;">
         </div>
 
         {{-- はくば薬局 --}}
         <a href="{{ route('stores') }}"
-            class="block mx-auto my-8 md:my-24 w-full xl:w-[70%] transition duration-300 hover:opacity-70 cursor-pointer">
+            class="block mx-auto my-8 md:my-24 w-[70%] transition duration-300 hover:opacity-70 cursor-pointer">
             <img src="{{ asset($storeImg1->file_path . $storeImg1->file_name) }}" alt="はくば薬局"
                 class="w-full transition duration-300 hover:brightness-110" style="object-fit: contain;">
         </a>
 
         {{-- 柏の葉キャンパス駅前店 --}}
         <a href="{{ route('stores') }}"
-            class="block mx-auto my-8 md:my-24 w-full xl:w-[70%] transition duration-300 hover:opacity-70 cursor-pointer">
+            class="block mx-auto my-8 md:my-24 w-[70%] transition duration-300 hover:opacity-70 cursor-pointer">
             <img src="{{ asset($storeImg2->file_path . $storeImg2->file_name) }}" alt="柏の葉キャンパス駅前店"
                 class="w-full transition duration-300 hover:brightness-110" style="object-fit: contain;">
         </a>
 
         {{-- ABOUT US （PC表示）--}}
-        <div class="relative hidden lg:block py-12 md:py-24">
+        <div class="relative hidden md:block py-12 md:py-24">
             <div class="pt-8 mt-0 flex flex-row items-center gap-8 z-20">
-                <img src="{{ asset($titleAbout->file_path . $titleAbout->file_name) }}" alt="タイトル"
-                    class="lg:h-24 md:h-18 h-8" style="object-fit: contain;">
+                <img src="{{ asset($titleAbout->file_path . $titleAbout->file_name) }}" alt="タイトル" class="md:h-18 h-12"
+                    style="object-fit: contain;">
                 <img src="{{ asset($balloon->file_path . $balloon->file_name) }}" alt="風船" class="ml-24 h-30 z-10"
                     style="object-fit: contain;">
             </div>
@@ -187,14 +187,14 @@
                     style="object-fit: contain;">
                 <a href="{{ route($button3->spare1) }}">
                     <img src="{{ asset($button3->file_path . $button3->file_name) }}" alt="もっとみる"
-                        class="md:h-20 h-12 transition transform hover:scale-105 hover:opacity-90">
+                        class="md:h-16 h-12 transition transform hover:scale-105 hover:opacity-90">
                 </a>
             </div>
         </div>
     </div>
 
     {{-- ABOUT US （スマホ表示）--}}
-    <div class="relative w-full block lg:hidden">
+    <div class="relative w-full block md:hidden">
         <img src="{{ asset($background3->file_path . $background3->file_name) }}" alt="ABOUT US"
             class="w-full h-auto object-cover">
         <div class="absolute inset-0 flex items-end justify-center pointer-events-none">
@@ -212,12 +212,12 @@
     <div class="py-4 md:py-24 bg-cover bg-top bg-no-repeat hidden lg:block"
         style="background-image: url('{{ asset($recruitBackground->file_path . $recruitBackground->file_name) }}');">
         <div class="pt-8 mt-0 flex flex-row items-center gap-8 z-20">
-            <img src="{{ asset($titleRecruit->file_path . $titleRecruit->file_name) }}" alt="タイトル"
-                class="lg:h-24 md:h-18 h-8" style="object-fit: contain;">
+            <img src="{{ asset($titleRecruit->file_path . $titleRecruit->file_name) }}" alt="タイトル" class="md:h-18 h-12"
+                style="object-fit: contain;">
         </div>
 
         <div class="container mx-auto px-8 flex items-center justify-center gap-6 my-12">
-            <img src="{{ asset($person2->file_path . $person2->file_name) }}" alt="人1" class="mr-8 h-90 z-10"
+            <img src="{{ asset($person2->file_path . $person2->file_name) }}" alt="人1" class="mr-8 h-80 z-10"
                 style="object-fit: contain;">
             <div class="space-y-6 flex flex-col items-center">
 
@@ -229,11 +229,11 @@
                 <div class="mt-20 z-10 flex items-center justify-center">
                     <a href="{{ route($button4->spare1) }}">
                         <img src="{{ asset($button4->file_path . $button4->file_name) }}" alt="もっとみる"
-                            class="md:h-20 h-12 transition transform hover:scale-105 hover:opacity-90">
+                            class="h-auto w-[70%] mx-auto max-w-xs md:max-w-md lg:max-w-lg transition transform hover:scale-105 hover:opacity-90">
                     </a>
                 </div>
             </div>
-            <img src="{{ asset($person1->file_path . $person1->file_name) }}" alt="人2" class="ml-8 h-90 z-10"
+            <img src="{{ asset($person1->file_path . $person1->file_name) }}" alt="人2" class="ml-8 h-80 z-10"
                 style="object-fit: contain;">
         </div>
 

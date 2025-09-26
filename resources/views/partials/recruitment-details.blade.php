@@ -1,5 +1,5 @@
 <div
-    class="grid grid-cols-[80px,1fr] md:grid-cols-[100px,1fr] gap-x-1 gap-y-3 md:gap-x-6 md:gap-y-5 text-xs md:text-base lg:text-xl items-start">
+    class="grid grid-cols-[80px,1fr] md:grid-cols-[100px,1fr] gap-x-1 gap-y-3 md:gap-x-6 md:gap-y-5 text-xs md:text-base  items-start">
 
     <div class="font-bold text-right flex justify-between items-center ">
         @php

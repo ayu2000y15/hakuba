@@ -3,7 +3,7 @@
 
 @section('content')
     {{-- スマホ表示 --}}
-    <div class="relative xl:hidden">
+    <div class="relative md:hidden">
         <img src="{{ asset($background->file_path . $background->file_name) }}" alt="タイトル" class=" w-full h-auto "
             style="object-fit: contain;">
         <div class="absolute inset-0 flex items-end justify-center pointer-events-none z-20">
@@ -18,14 +18,16 @@
     </div>
 
     {{-- PC表示 --}}
-    <div class="relative mx-auto py-4 md:py-24 bg-cover bg-top bg-no-repeat hidden xl:block"
+    <div class="relative mx-auto py-4 md:py-24 bg-cover bg-top bg-no-repeat hidden md:block"
         style="background-image: url('{{ asset($backgroundPc->file_path . $backgroundPc->file_name) }}');">
 
-        <img src="{{ asset($titleAbout->file_path . $titleAbout->file_name) }}" alt="タイトル" class="lg:h-24 md:h-18 h-8"
-            style="object-fit: contain;">
+        <div class="md:pt-0 pt-8  mt-0 flex flex-row items-center gap-8 z-20">
+            <img src="{{ asset($titleAbout->file_path . $titleAbout->file_name) }}" alt="タイトル" class="md:h-18 h-12"
+                style="object-fit: contain;">
+        </div>
         <div class="container w-[80%] mx-auto px-4 flex flex-col ">
 
-            <div class="relative mt-12 text-4xl leading-loose font-semibold" style="color: rgb(128,130,133)">
+            <div class="relative mt-12 text-2xl leading-loose font-semibold" style="color: rgb(128,130,133)">
                 薬局はくばはスタッフ全員が楽しく・明るく働き、<br>
                 患者さんから親しまれる薬局を目指しています
                 <img src="{{ asset($balloon->file_path . $balloon->file_name) }}" alt="風船"
@@ -84,7 +86,7 @@
                 <div class="mt-24 pointer-events-auto">
                     <a href="{{ route($button->spare1) }}">
                         <img src="{{ asset($button->file_path . $button->file_name) }}" alt="採用案内"
-                            class="mb-10 h-auto w-[60vw] max-w-xs md:max-w-md lg:max-w-lg transition transform hover:translate-y-1 hover:opacity-80"
+                            class="mb-10 h-auto w-[60%] mx-auto max-w-xs md:max-w-md lg:max-w-lg transition transform hover:translate-y-1 hover:opacity-80"
                             style="object-fit: contain;">
                     </a>
                 </div>
