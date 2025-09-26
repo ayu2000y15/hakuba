@@ -13,9 +13,9 @@
         .initiative-content img,
         .initiative-content figure img {
             display: block;
-            margin: 1rem auto;
+            margin: 1rem;
             max-width: 720px; /* 必要なら値を調整してください */
-            width: 40% !important;
+            width: 50% !important;
             height: auto !important;
             object-fit: contain;
         }
