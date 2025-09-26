@@ -9,9 +9,8 @@
         <meta name="robots" content="noindex, nofollow">
     @endunless
     <title>@yield('title', '薬局はくば') - 薬局はくば</title>
-    <meta name="description" content="未来都市を体現するスマートシティ「柏の葉」。
-        この地で、地域の皆さまから選ばれる薬局であるために——。
-        私たちは「安心・信頼・笑顔」を大切に、日々、地域医療に貢献しています。" />
+    <meta name="description"
+        content="未来都市を体現するスマートシティ「柏の葉」。この地で、地域の皆さまから選ばれる薬局であるために——。私たちは「安心・信頼・笑顔」を大切に、日々、地域医療に貢献しています。" />
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
