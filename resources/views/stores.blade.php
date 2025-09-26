@@ -12,7 +12,7 @@
         style="background-image: url('{{ asset($backgroundPc->file_path . $backgroundPc->file_name) }}');">
 
         <div class="md:pt-0 pt-8 mt-0 flex flex-row items-center gap-8 z-20">
-            <img src="{{ asset($titleStores->file_path . $titleStores->file_name) }}" alt="タイトル" class="md:h-18 h-12"
+            <img src="{{ asset($titleStores->file_path . $titleStores->file_name) }}" alt="タイトル" class="md:h-18 h-8"
                 style="object-fit: contain;">
         </div>
         <div class="container md:w-[80%] mx-auto px-4 flex flex-col ">

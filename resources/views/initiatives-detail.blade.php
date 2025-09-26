@@ -33,6 +33,14 @@
             overflow-wrap: anywhere;
             word-break: break-word;
         }
+
+        @media (max-width: 768px) {
+            .initiative-content img,
+            .initiative-content figure img{
+                margin: 1rem auto;
+                width: 100% !important;
+            }
+        }
     </style>
 @endsection
 
@@ -47,7 +55,7 @@
         {{-- タイトル --}}
         <div class="md:pt-0 pt-8  mt-0 flex flex-row items-center gap-8 z-20">
             <img src="{{ asset($titleInitiatives->file_path . $titleInitiatives->file_name) }}" alt="タイトル"
-                class="md:h-18 h-12" style="object-fit: contain;">
+                class="md:h-18 h-8" style="object-fit: contain;">
         </div>
 
         <div class="container mx-auto px-4 flex flex-col items-center relative">
@@ -89,7 +97,10 @@
                                             <i class="text-[15px] fas fa-caret-left mr-2"></i>
                                             <div class="text-left">
                                                 <div class="text-xs opacity-75">previous</div>
-                                                <div class="text-sm font-bold">{{ Str::limit($previousPost->attempt["value"], 15) }}</div>
+                                                <div class="text-sm font-bold">
+                                                    <span class="block lg:hidden">{{ Str::limit($previousPost->attempt["value"], 8) }}</span>
+                                                    <span class="hidden lg:block">{{ Str::limit($previousPost->attempt["value"], 15) }}</span>
+                                                </div>
                                             </div>
                                         </a>
                                     @else
@@ -109,7 +120,10 @@
                                             class="flex items-center px-4 py-3 text-white bg-cover bg-center rounded-sm hover:opacity-80 transition duration-200">
                                             <div class="text-right">
                                                 <div class="text-xs opacity-75">next</div>
-                                                <div class="text-sm font-bold">{{ Str::limit($nextPost->attempt["value"], 15) }}</div>
+                                                <div class="text-sm font-bold">
+                                                    <span class="block lg:hidden">{{ Str::limit($nextPost->attempt["value"], 8) }}</span>
+                                                    <span class="hidden lg:block">{{ Str::limit($nextPost->attempt["value"], 15) }}</span>
+                                                </div>
                                             </div>
                                             <i class="fas fa-caret-right ml-2"></i>
                                         </a>

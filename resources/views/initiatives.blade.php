@@ -10,7 +10,7 @@
         {{-- タイトル --}}
         <div class="md:pt-0 pt-8  mt-0 flex flex-row items-center gap-8 z-20">
             <img src="{{ asset($titleInitiatives->file_path . $titleInitiatives->file_name) }}" alt="タイトル"
-                class="md:h-18 h-12" style="object-fit: contain;">
+                class="md:h-18 h-8" style="object-fit: contain;">
         </div>
 
         <div class="container mx-auto px-4 flex flex-col items-center relative">

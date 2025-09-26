@@ -52,7 +52,7 @@
         {{-- タイトル --}}
         <div class="pt-8 mt-0 flex flex-row items-center gap-8 z-20">
             <img src="{{ asset($titleInitiatives->file_path . $titleInitiatives->file_name) }}" alt="タイトル"
-                class="md:h-18 h-12" style="object-fit: contain;">
+                class="md:h-18 h-8" style="object-fit: contain;">
         </div>
 
         <div class="container mx-auto px-4 flex flex-col items-center">
@@ -126,7 +126,7 @@
         style="background-image: url('{{ asset($background2->file_path . $background2->file_name) }}'); ">
         {{-- タイトル --}}
         <div class="pt-8 mt-0 flex flex-row items-center gap-8 z-20">
-            <img src="{{ asset($titleStores->file_path . $titleStores->file_name) }}" alt="タイトル" class=" md:h-18 h-12"
+            <img src="{{ asset($titleStores->file_path . $titleStores->file_name) }}" alt="タイトル" class=" md:h-18 h-8"
                 style="object-fit: contain;">
         </div>
 
