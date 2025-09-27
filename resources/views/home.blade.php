@@ -17,7 +17,7 @@
         <div
             class="absolute inset-0 flex ml-12 md:ml-48 items-center z-10 pointer-events-none bottom-[50%] md:bottom-[60%]">
             <div class="text-white text-2xl leading-relaxed md:text-3xl xl:text-6xl ">
-                {!! nl2br($TopText->content) !!}
+                <h1>{!! nl2br($TopText->content) !!}</h1>
             </div>
             <img src="{{ asset($bird->file_path . $bird->file_name) }}" alt="鳥"
                 class="ml-0 md:ml-8 mt-30 md:mt-40 xl:mt-70 h-10 xl:h-20" style="object-fit: contain;">
