@@ -33,7 +33,69 @@
 
 </head>
 
+<style>
+    #page-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.4s ease;
+    }
+
+    #page-loader.fade-out {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    #page-loader .loader-spinner {
+        width: 48px;
+        height: 48px;
+        border: 4px solid #d1fae5;
+        border-top-color: #26a7e1;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .img-fade {
+        opacity: 0;
+        transition: opacity 0.5s ease;
+    }
+
+    .img-fade.loaded {
+        opacity: 1;
+    }
+</style>
+
 <body class="font-sans antialiased text-gray-800">
+    <div id="page-loader" aria-hidden="true">
+        <div class="loader-spinner"></div>
+    </div>
+    <script>
+        (function () {
+            function hideLoader() {
+                var el = document.getElementById('page-loader');
+                if (!el) return;
+                el.classList.add('fade-out');
+                setTimeout(function () { el.style.display = 'none'; }, 420);
+            }
+            if (document.readyState === 'complete') {
+                hideLoader();
+            } else {
+                window.addEventListener('load', hideLoader);
+                // フォールバック：3秒後に強制非表示
+                setTimeout(hideLoader, 3000);
+            }
+        })();
+    </script>
     <div class="min-h-screen bg-white">
         @include('components.header')
 

@@ -9,9 +9,9 @@
     <div class="relative w-full overflow-hidden">
         <div class="relative w-full overflow-hidden main-visual">
             <img src="{{ asset($imgPc->file_path . $imgPc->file_name) }}" alt="メインビジュアル"
-                class="w-full h-auto hidden sm:block">
+                class="w-full h-auto hidden sm:block" loading="eager" fetchpriority="high">
             <img src="{{ asset($imgMobile->file_path . $imgMobile->file_name) }}" alt="メインビジュアル"
-                class="w-full h-auto sm:hidden">
+                class="w-full h-auto sm:hidden" loading="eager" fetchpriority="high">
         </div>
 
         <div
@@ -20,7 +20,7 @@
                 <h1>{!! nl2br($TopText->content) !!}</h1>
             </div>
             <img src="{{ asset($bird->file_path . $bird->file_name) }}" alt="鳥"
-                class="ml-0 md:ml-8 mt-30 md:mt-40 xl:mt-70 h-10 xl:h-20" style="object-fit: contain;">
+                class="ml-0 md:ml-8 mt-30 md:mt-40 xl:mt-70 h-10 xl:h-20" style="object-fit: contain;" loading="eager">
         </div>
         {{-- ★ 変更箇所：柄の画像 --}}
         {{--
@@ -31,7 +31,8 @@
         --}}
         <div class="absolute -bottom-20 w-full h-48 md:h-64 lg:h-80 pointer-events-none"
             style="z-index: 10; clip-path: ellipse(90% 100% at 25% 100%);">
-            <img src="{{ asset($imgUnder->file_path . $imgUnder->file_name) }}" alt="柄" class="w-full h-full object-cover">
+            <img src="{{ asset($imgUnder->file_path . $imgUnder->file_name) }}" alt="柄"
+                class="w-full h-full object-cover img-fade" loading="eager" onload="this.classList.add('loaded')">
         </div>
 
         <div class="absolute inset-0 flex items-end justify-center pointer-events-none z-20">
@@ -39,7 +40,7 @@
                 <a href="{{ route($button0->spare1) }}">
                     <img src="{{ asset($button0->file_path . $button0->file_name) }}" alt="採用案内"
                         class="h-auto w-[70vw] max-w-xs md:max-w-md lg:max-w-lg transition transform hover:translate-y-1 hover:opacity-80"
-                        style="object-fit: contain;">
+                        style="object-fit: contain;" loading="eager">
                 </a>
             </div>
         </div>
@@ -52,7 +53,8 @@
         {{-- タイトル --}}
         <div class="pt-8 mt-0 flex flex-row items-center gap-8 z-20">
             <img src="{{ asset($titleInitiatives->file_path . $titleInitiatives->file_name) }}" alt="タイトル"
-                class="md:h-18 h-8" style="object-fit: contain;">
+                class="md:h-18 h-8 img-fade" style="object-fit: contain;" loading="lazy"
+                onload="this.classList.add('loaded')">
         </div>
 
         <div class="container mx-auto px-4 flex flex-col items-center">
@@ -62,7 +64,8 @@
 
                 <!-- 車の画像を白い枠の右上角（外側）に配置 -->
                 <img src="{{ asset($car->file_path . $car->file_name) }}" alt="車"
-                    class="absolute -top-20 -right-0 md:-top-30 md:h-30 h-12 z-10" style="object-fit: contain;">
+                    class="absolute -top-20 -right-0 md:-top-30 md:h-30 h-12 z-10 img-fade" style="object-fit: contain;"
+                    loading="lazy" onload="this.classList.add('loaded')">
 
                 @foreach ($initiativeContents as $content)
                     <a href="{{ route('initiatives.detail', $content->id) }}"
@@ -87,7 +90,9 @@
                                     @php
                                         $contentImg = $content->attempt_img["value"];
                                     @endphp
-                                    <img src="{{ asset($contentImg) }}" alt="コンテンツ画像" class="w-40 h-auto object-contain shadow-lg">
+                                    <img src="{{ asset($contentImg) }}" alt="コンテンツ画像"
+                                        class="w-40 h-auto object-contain shadow-lg img-fade" loading="lazy"
+                                        onload="this.classList.add('loaded')">
                                 @endif
                             </div>
 
@@ -134,14 +139,16 @@
         <a href="{{ route('stores') }}"
             class="block mx-auto my-8 md:my-24 w-[70%] transition duration-300 hover:opacity-70 cursor-pointer">
             <img src="{{ asset($storeImg1->file_path . $storeImg1->file_name) }}" alt="はくば薬局"
-                class="w-full transition duration-300 hover:brightness-110" style="object-fit: contain;">
+                class="w-full transition duration-300 hover:brightness-110 img-fade" style="object-fit: contain;"
+                loading="lazy" onload="this.classList.add('loaded')">
         </a>
 
         {{-- 柏の葉キャンパス駅前店 --}}
         <a href="{{ route('stores') }}"
             class="block mx-auto my-8 md:my-24 w-[70%] transition duration-300 hover:opacity-70 cursor-pointer">
             <img src="{{ asset($storeImg2->file_path . $storeImg2->file_name) }}" alt="柏の葉キャンパス駅前店"
-                class="w-full transition duration-300 hover:brightness-110" style="object-fit: contain;">
+                class="w-full transition duration-300 hover:brightness-110 img-fade" style="object-fit: contain;"
+                loading="lazy" onload="this.classList.add('loaded')">
         </a>
 
         {{-- ABOUT US （PC表示）--}}
@@ -149,8 +156,8 @@
             <div class="pt-8 mt-0 flex flex-row items-center gap-8 z-20">
                 <img src="{{ asset($titleAbout->file_path . $titleAbout->file_name) }}" alt="タイトル" class="md:h-18 h-12"
                     style="object-fit: contain;">
-                <img src="{{ asset($balloon->file_path . $balloon->file_name) }}" alt="風船" class="ml-24 h-30 z-10"
-                    style="object-fit: contain;">
+                <img src="{{ asset($balloon->file_path . $balloon->file_name) }}" alt="風船" class="ml-24 h-30 z-10 img-fade"
+                    style="object-fit: contain;" loading="lazy" onload="this.classList.add('loaded')">
             </div>
 
             {{-- PC版レイアウト：左右2列構成 --}}
@@ -183,8 +190,8 @@
 
             {{-- もっと見るボタン：中央配置 --}}
             <div class="mt-20 mr-40 z-10 flex items-center justify-center">
-                <img src="{{ asset($bird2->file_path . $bird2->file_name) }}" alt="鳥" class="h-30 mr-12 z-10"
-                    style="object-fit: contain;">
+                <img src="{{ asset($bird2->file_path . $bird2->file_name) }}" alt="鳥" class="h-30 mr-12 z-10 img-fade"
+                    style="object-fit: contain;" loading="lazy" onload="this.classList.add('loaded')">
                 <a href="{{ route($button3->spare1) }}">
                     <img src="{{ asset($button3->file_path . $button3->file_name) }}" alt="もっとみる"
                         class="md:h-16 h-12 transition transform hover:scale-105 hover:opacity-90">
@@ -217,8 +224,8 @@
         </div>
 
         <div class="container mx-auto px-8 flex items-center justify-center gap-6 my-12">
-            <img src="{{ asset($person2->file_path . $person2->file_name) }}" alt="人1" class="mr-8 h-80 z-10"
-                style="object-fit: contain;">
+            <img src="{{ asset($person2->file_path . $person2->file_name) }}" alt="人1" class="mr-8 h-80 z-10 img-fade"
+                style="object-fit: contain;" loading="lazy" onload="this.classList.add('loaded')">
             <div class="space-y-6 flex flex-col items-center">
 
                 <div class="text-center text-2xl xl:text-3xl leading-loose font-semibold" style="color: rgb(128,130,133)">
@@ -233,8 +240,8 @@
                     </a>
                 </div>
             </div>
-            <img src="{{ asset($person1->file_path . $person1->file_name) }}" alt="人2" class="ml-8 h-80 z-10"
-                style="object-fit: contain;">
+            <img src="{{ asset($person1->file_path . $person1->file_name) }}" alt="人2" class="ml-8 h-80 z-10 img-fade"
+                style="object-fit: contain;" loading="lazy" onload="this.classList.add('loaded')">
         </div>
 
         {{-- もっと見るボタン：中央配置 --}}
